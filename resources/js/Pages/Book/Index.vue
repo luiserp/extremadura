@@ -7,6 +7,7 @@ import { App } from '@/types/generated';
 import { Paginator as TypePaginator } from '@/types/paginator';
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import { Head, router } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Paginator from 'primevue/paginator';
@@ -45,36 +46,45 @@ console.log(props.books);
             <div class="block mx-auto max-w-screen-2xl rounded-xl px-8 py-4 shadow-sm border text-sm"
                 :style="{ backgroundColor: 'var(--p-layout-container-background)', borderColor: 'var(--p-border-color)' }">
                 <DataTable :value="booksData" tableStyle="min-width: 50rem">
-                    <Column header="Title">
+                    <Column :header="trans('book.title')">
                         <template #body="{ data }">
                             <div :title="data.title" class="truncate max-h-14 max-w-80">
                                 {{ data.title }}
+
+                                <div class="flex gap-2">
+                                    <p>{{ trans('book.authors') + ': ' }}</p>
+                                    <div class="flex gap-2">
+                                        <p v-for="author, index in data.authors" class="font-light text-sm">
+                                            {{ author.name + (index < data.authors.length - 1 ? ',' : '') }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </template>
                     </Column>
-                    <Column header="Category">
+                    <Column :header="trans('book.category')">
                         <template #body="{ data }">
                             <div>{{ capitalizeWords(data.category.name) }}</div>
                         </template>
                     </Column>
-                    <Column header="Year">
+                    <Column :header="trans('book.year')">
                         <template #body="{ data }">
                             <div class="flex flex-col whitespace-nowrap">
-                                <span class="font-light">Catalog: {{ data.catalog }}</span>
-                                <span class="font-light">Year: {{ data.year }}</span>
+                                <span class="font-light">{{ trans('book.catalog') + ': ' + data.catalog }}</span>
+                                <span class="font-light">{{ trans('book.year') + ': ' + data.year }}</span>
                             </div>
                         </template>
                     </Column>
-                    <Column field="editorial.name" header="Editorial"></Column>
-                    <Column field="city.name" header="City"></Column>
-                    <Column header="Description">
+                    <Column field="editorial.name" :header="trans('book.editorial')"></Column>
+                    <Column field="city.name" :header="trans('book.city')"></Column>
+                    <Column :header="trans('book.description')">
                         <template #body="{ data }">
                             <div class="truncate max-h-14 max-w-80">
                                 {{ data.description }}
                             </div>
                         </template>
                     </Column>
-                    <Column header="Actions">
+                    <Column :header="trans('common.actions')">
                         <template #body="{ data }">
                             <div class="flex justify-center">
                                 <Dropdown width="24">
