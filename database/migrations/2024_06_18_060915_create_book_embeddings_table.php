@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_nlps', function (Blueprint $table) {
+        Schema::create('book_embeddings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
-
-            $table->string('sentiment_model');
-            $table->double('positive_sentiment')->default(0);
-            $table->double('negative_sentiment')->default(0);
-            $table->double('neutral_sentiment')->default(0);
 
             $table->string('embeddings_model');
             $table->json('embeddings');
