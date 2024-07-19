@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'select' => 'Select',
     'saved' => 'Saved.',
     'save' => 'Save',
@@ -39,4 +38,6 @@ return [
     'withholding' => 'Withholding',
     'details' => 'Details',
     'show' => 'Show',
+    'new' => 'New',
+    'metadata' => 'Metadata',
 ];

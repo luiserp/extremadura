@@ -9,10 +9,12 @@ import { SunIcon } from "@heroicons/vue/24/outline";
 import { MoonIcon } from "@heroicons/vue/24/outline";
 import { HomeIcon } from "@heroicons/vue/24/outline";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import { loadLanguageAsync, trans } from 'laravel-vue-i18n'
+import { ref } from "vue";
+import { trans } from 'laravel-vue-i18n'
 import { LanguageIcon } from "@heroicons/vue/24/outline";
 import { useColorScheme } from "@/Composables/ColorScheme/colorScheme";
+import Container from "@/Components/Container/Container.vue";
+import { useLocale } from "@/Composables/Locale/locale";
 
 defineProps({
     title: String,
@@ -25,18 +27,10 @@ defineProps({
 const showingNavigationDropdown = ref(false);
 
 const logout = () => {
-    console.log("logout");
     router.post(route("logout"));
 };
 
-onMounted(() => {
-    loadLanguageAsync(localStorage.getItem('locale') || 'en');
-});
-
-const changeLanguage = (lang) => {
-    loadLanguageAsync(lang);
-    localStorage.setItem('locale', lang);
-}
+const { changeLanguage } = useLocale();
 
 const { colorScheme, toggleColorScheme } = useColorScheme();
 
@@ -49,14 +43,13 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
             <title>{{ title }}</title>
         </Head>
 
-        <div class="min-h-screen"
-            :style="{ backgroundColor: 'var(--p-layout-background)' }">
-            <nav class="border-b" :style="{
+        <div class="min-h-screen" :style="{ backgroundColor: 'var(--p-layout-background)' }">
+            <nav class="border-b shadow-sm" :style="{
                 backgroundColor: 'var(--p-layout-navigation-background)',
                 borderColor: 'var(--p-border-color)',
             }">
                 <!-- Primary Navigation Menu -->
-                <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="px-16">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
@@ -198,14 +191,14 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="hidden bg-white shadow">
-                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <header v-if="$slots.header" class="px-2">
+                <Container>
                     <slot name="header" />
-                </div>
+                </Container>
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="px-2">
                 <slot />
             </main>
 

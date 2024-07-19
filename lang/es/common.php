@@ -38,4 +38,6 @@ return [
     'withholding' => 'Retención',
     'details' => 'Detalles',
     'show' => 'Mostrar',
+    'new' => 'Nuevo',
+    'metadata' => 'Metadatos',
 ];

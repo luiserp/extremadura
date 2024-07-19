@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Book\BookDeleteController;
 use App\Http\Controllers\Book\BookIndexController;
+use App\Http\Controllers\Book\BookDetailController;
+use App\Http\Controllers\Book\BookEditController;
+use App\Http\Controllers\Book\BookUpdateController;
+use App\Http\Controllers\Navigation\NavigationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,8 +31,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::get('back', [NavigationController::class, 'back'])->name('back');
 
+
+Route::group(['middleware' => 'auth'], function () {
     // Books
     Route::get('/books', BookIndexController::class)->name('books.index');
+    Route::get('books/detail/{id}', BookDetailController::class)->name('books.detail');
+    Route::get('books/edit/{id}', BookEditController::class)->name('books.edit');
+    Route::get('books/update/{id}', BookUpdateController::class)->name('books.update');
+    Route::delete('books/delete/{id}', BookDeleteController::class)->name('books.delete');
 });

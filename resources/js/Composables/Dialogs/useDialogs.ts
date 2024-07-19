@@ -1,15 +1,18 @@
 import TaxoConfirmationModal from "@/Components/Modals/TaxoConfirmationModal.vue";
 import { ref, reactive } from "vue";
+import { TaxoConfirmationModalInterface } from "@/types/confirmation-modal-interface";
 
 let dialogId = 0;
-export const dialogRefStore = reactive([]);
+export const dialogRefStore = reactive<any>([]);
 
 function getDialogId() {
     return dialogId++;
 }
 
-function deleteDialog(id) {
-    const index = dialogRefStore.findIndex((dialog) => dialog.id === id);
+function deleteDialog(id: number) {
+    const index = dialogRefStore.findIndex(
+        (dialog: { id: number }) => dialog.id === id
+    );
     dialogRefStore.splice(index, 1);
 }
 
@@ -17,25 +20,25 @@ export function useDialogs(component = TaxoConfirmationModal) {
     // Private variables
     // Work with promises and callbacks
     const ID = getDialogId();
-    const resolvePromise = ref(undefined);
-    const rejectPromise = ref(undefined);
-    const onCancelCallback = ref(() => {});
-    const onConfirmCallback = ref(() => {});
+    const resolvePromise = ref<Function>(() => {});
+    const rejectPromise = ref<Function>(() => {});
+    const onCancelCallback = ref<Function>(() => {});
+    const onConfirmCallback = ref<Function>(() => {});
 
     /**
      * @template T props
-     * @param {T|import("@/Interfaces/TaxoConfirmationModalInterface").TaxoConfirmationModalInterface} props
+     * @param {TaxoConfirmationModalInterface} props
      * @returns {Promise<unknown>}
      */
-    function show(props) {
+    function show(props: TaxoConfirmationModalInterface) {
         dialogRefStore.push({
             dialog: component,
             props,
             show: true,
-            cancel: (data) => {
+            cancel: (data: any) => {
                 _cancel(data);
             },
-            confirm: (data) => {
+            confirm: (data: any) => {
                 _confirm(data);
             },
         });
@@ -46,15 +49,15 @@ export function useDialogs(component = TaxoConfirmationModal) {
         });
     }
 
-    const onCancel = (callback) => {
+    const onCancel = (callback: Function) => {
         onCancelCallback.value = callback;
     };
 
-    const onConfirm = (callback) => {
+    const onConfirm = (callback: Function) => {
         onConfirmCallback.value = callback;
     };
 
-    function _confirm(data) {
+    function _confirm(data: any) {
         deleteDialog(ID);
         setTimeout(() => {
             onConfirmCallback.value();
@@ -62,7 +65,7 @@ export function useDialogs(component = TaxoConfirmationModal) {
         }, 100);
     }
 
-    function _cancel(data) {
+    function _cancel(data: any) {
         deleteDialog(ID);
         setTimeout(() => {
             onCancelCallback.value();

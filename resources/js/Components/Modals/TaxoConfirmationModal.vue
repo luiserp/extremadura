@@ -52,8 +52,8 @@
                             <div class="gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row">
                                 <template v-if="buttons.length > 0">
                                     <component v-for="button in buttons" :key="button.label" :is="Button"
-                                        :severity="button.type == 'primary' ? 'primary' : 'secondary'"
-                                        type="button" @click="confirm(button.emit)">
+                                        :severity="button.type == 'primary' ? 'primary' : 'secondary'" type="button"
+                                        @click="confirm(button.emit)">
                                         {{ button.label }}
                                     </component>
                                 </template>
@@ -61,7 +61,7 @@
                                     <Button type="button" @click="confirm(true)">
                                         {{ okButton }}
                                     </Button>
-                                    <Button type="button" @click="close()">
+                                    <Button type="button" severity="secondary" outlined @click="close()">
                                         {{ cancelButton }}
                                     </Button>
                                 </slot>

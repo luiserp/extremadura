@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { dialogRefStore } from '@/Composables/Dialogs/useDialogs.js';
+import { dialogRefStore } from '@/Composables/Dialogs/useDialogs';
 </script>
