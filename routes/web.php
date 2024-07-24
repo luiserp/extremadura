@@ -4,6 +4,8 @@ use App\Http\Controllers\Book\BookDeleteController;
 use App\Http\Controllers\Book\BookIndexController;
 use App\Http\Controllers\Book\BookDetailController;
 use App\Http\Controllers\Book\BookEditController;
+use App\Http\Controllers\Book\Api\BookGetActiveBook;
+use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
 use App\Http\Controllers\Navigation\NavigationController;
 use Illuminate\Foundation\Application;
@@ -40,5 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('books/detail/{id}', BookDetailController::class)->name('books.detail');
     Route::get('books/edit/{id}', BookEditController::class)->name('books.edit');
     Route::get('books/update/{id}', BookUpdateController::class)->name('books.update');
+    Route::get('books/set-active/{id}', BookSetActiveController::class)->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->name('books.delete');
 });
+
+Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');

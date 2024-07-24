@@ -179,7 +179,7 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
-                                <ResponsiveNavLink as="button" href="#">
+                                <ResponsiveNavLink as="button">
                                     {{ $t("nav.logout") }}
                                 </ResponsiveNavLink>
                             </form>

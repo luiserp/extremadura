@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('year')->nullable();
             $table->string('catalog')->nullable();
             $table->string('color')->nullable();
+            $table->boolean('active')->default(false);
+
 
             $table->foreignId('category_id')->constrained();
             $table->foreignId('editorial_id')->constrained();

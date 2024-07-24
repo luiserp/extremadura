@@ -35,4 +35,14 @@ class Book extends Model
         return $this->belongsToMany(Author::class);
     }
 
+    public function embedding(): HasOne
+    {
+        return $this->hasOne(BookEmbedding::class);
+    }
+
+    public function sentiment(): HasOne
+    {
+        return $this->hasOne(BookSentiment::class);
+    }
+
 }

@@ -3,10 +3,9 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
-import { App } from '@/types/generated';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
-import { Head, router } from '@inertiajs/vue3';
+import { Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
+import { router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
@@ -14,10 +13,21 @@ import Paginator from 'primevue/paginator';
 import { computed, ref, watch } from 'vue';
 import Container from "@/Components/Container/Container.vue";
 import { useBook } from '@/Composables/Book/Book';
+import BookFilter from './Partials/BookFilter.vue';
+import ToggleSwitch from 'primevue/toggleswitch';
+import { App } from '@/types/app';
 
 const props = defineProps({
     books: {
         type: Object as () => TypePaginator<App.Dtos.BookDto>,
+        required: true
+    },
+    filters: {
+        type: Object as () => App.Dtos.BookFilterDto,
+        required: true
+    },
+    categories: {
+        type: Array as () => App.Dtos.CategoryDto[],
         required: true
     },
 });
@@ -27,7 +37,7 @@ const booksData = computed(() => {
 });
 
 const onPageChange = (event: { page: number, rows: number }) => {
-    router.get(route('books.index', { page: event.page + 1, per_page: event.rows }), {}, { preserveScroll: true });
+    router.get(route('books.index', { page: event.page + 1, per_page: event.rows, ...props.filters }), {}, { preserveScroll: true });
 }
 
 const currentPage = computed(() => {
@@ -43,6 +53,10 @@ watch(() => selected.value, (value) => {
     }
 });
 
+const setStatus = (book: App.Dtos.BookDto) => {
+    router.get(route('books.set-active', { id: book.id }), {}, { preserveScroll: true });
+}
+
 </script>
 
 <template>
@@ -50,11 +64,15 @@ watch(() => selected.value, (value) => {
     <AppLayout :title="trans('book.books')">
 
         <Container>
+            <BookFilter :filters="props.filters" :books="books" :categories="categories" />
+        </Container>
+
+        <Container>
             <DataTable :value="booksData" tableStyle="min-width: 50rem" rowHover @row-dblclick="selected = $event.data"
                 :rowClass="() => 'cursor-pointer select-none'">
                 <Column :header="trans('book.title')">
                     <template #body="{ data }">
-                        <div :title="data.title" class="truncate max-h-14 max-w-80">
+                        <div :title="data.title" class="truncate max-h-18 max-w-80">
                             {{ data.title }}
 
                             <div class="flex gap-2">
@@ -63,6 +81,24 @@ watch(() => selected.value, (value) => {
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
                                         {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
                                 </div>
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <span
+                                    :title="trans('book.has_sentiment')"
+                                    v-if="data.has_sentiment"
+                                >
+                                    <HeartIcon
+                                        class="h-5 w-5"
+                                        style="color: var(--p-text-color)" />
+                                </span>
+                                <span
+                                    :title="trans('book.has_embeddings')"
+                                    v-if="data.has_embeddings"
+                                >
+                                    <ListBulletIcon
+                                        class="h-5 w-5"
+                                        style="color: var(--p-text-color)" />
+                                </span>
                             </div>
                         </div>
                     </template>
@@ -86,6 +122,13 @@ watch(() => selected.value, (value) => {
                     <template #body="{ data }">
                         <div class="truncate max-h-14 max-w-80">
                             {{ data.description }}
+                        </div>
+                    </template>
+                </Column>
+                <Column :header="trans('common.status')">
+                    <template #body="{ data }">
+                        <div class="flex justify-center">
+                            <ToggleSwitch v-model="data.active" @change="setStatus(data)"/>
                         </div>
                     </template>
                 </Column>

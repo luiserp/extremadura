@@ -12,6 +12,10 @@ class BookEmbedding extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'embeddings' => 'array',
+    ];
+
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);

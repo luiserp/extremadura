@@ -20,9 +20,6 @@ return new class extends Migration
             $table->double('negative_sentiment')->default(0);
             $table->double('neutral_sentiment')->default(0);
 
-            $table->string('embeddings_model');
-            $table->json('embeddings');
-
             $table->timestamps();
         });
     }

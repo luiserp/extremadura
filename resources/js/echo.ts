@@ -1,9 +1,9 @@
 import Echo from "laravel-echo";
 
 import Pusher from "pusher-js";
-window.Pusher = Pusher;
+(window as any).Pusher = Pusher;
 
-window.Echo = new Echo({
+(window as any).Echo = new Echo({
     broadcaster: "pusher",
     key: import.meta.env.VITE_ABLY_PUBLIC_KEY,
     wsHost: "realtime-pusher.ably.io",

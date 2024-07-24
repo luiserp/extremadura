@@ -3,7 +3,7 @@ import Container from '@/Components/Container/Container.vue';
 import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
-import { App } from '@/types/generated';
+import { App } from '@/types/app';
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
 import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
@@ -68,13 +68,13 @@ const { showBook, editBook, deleteBook } = useBook();
                         {{ trans('book.catalog') + ': ' + bookData.catalog }}
                     </p>
                     <p>
-                        {{ trans('book.editorial') + ': ' + bookData.editorial.name }}
+                        {{ trans('book.editorial') + ': ' + bookData.editorial?.name }}
                     </p>
                     <p>
-                        {{ trans('book.city') + ': ' + bookData.city.name }}
+                        {{ trans('book.city') + ': ' + bookData.city?.name }}
                     </p>
                     <p>
-                        {{ trans('book.category') + ': ' + capitalizeWords(bookData.category.name) }}
+                        {{ trans('book.category') + ': ' + capitalizeWords(bookData.category?.name ?? '') }}
                     </p>
                 </div>
             </div>

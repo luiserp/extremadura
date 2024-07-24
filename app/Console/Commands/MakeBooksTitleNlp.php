@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Books\BookNlp;
 use App\Models\Books\Book;
+use App\Models\Books\BookEmbedding;
+use App\Models\Books\BookSentiment;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class MakeBooksTitleNlp extends Command
 {
@@ -39,10 +41,6 @@ class MakeBooksTitleNlp extends Command
 
             dispatch(function() use ($book, $title) {
 
-                if (BookNlp::where('book_id', $book->id)->exists()) {
-                    return;
-                }
-
                 $responses = Http::pool(fn (Pool $pool) => [
                     $pool->post(config('services.nlp.url'). '/nlp', [
                         'text' => $title
@@ -68,14 +66,20 @@ class MakeBooksTitleNlp extends Command
                     'color' => "rgb($r, $g, $b)"
                 ]);
 
-                BookNlp::create([
+                BookEmbedding::updateOrCreate([
                     'book_id' => $book->id,
+                ], [
+                    'embeddings_model' => $embeddings['model'],
+                    'embeddings' => json_encode($embeddings['embeddings']),
+                ]);
+
+                BookSentiment::updateOrCreate([
+                    'book_id' => $book->id,
+                ], [
                     'sentiment_model' => $nlp['model'],
                     'positive_sentiment' => $positive,
                     'negative_sentiment' => $negative,
                     'neutral_sentiment' => $neutral,
-                    'embeddings_model' => $embeddings['model'],
-                    'embeddings' => json_encode($embeddings['embeddings']),
                 ]);
             });
 

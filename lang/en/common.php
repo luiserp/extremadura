@@ -40,4 +40,5 @@ return [
     'show' => 'Show',
     'new' => 'New',
     'metadata' => 'Metadata',
+    'status' => 'Status',
 ];
