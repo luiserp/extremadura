@@ -5,9 +5,12 @@ use App\Http\Controllers\Book\BookIndexController;
 use App\Http\Controllers\Book\BookDetailController;
 use App\Http\Controllers\Book\BookEditController;
 use App\Http\Controllers\Book\Api\BookGetActiveBook;
+use App\Http\Controllers\Book\BookCalculateEmbeddingController;
+use App\Http\Controllers\Book\BookCalculateSentimentController;
 use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
 use App\Http\Controllers\Navigation\NavigationController;
+use App\Http\Controllers\SetLocaleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,7 +38,6 @@ Route::get('/', function () {
 
 Route::get('back', [NavigationController::class, 'back'])->name('back');
 
-
 Route::group(['middleware' => 'auth'], function () {
     // Books
     Route::get('/books', BookIndexController::class)->name('books.index');
@@ -44,6 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('books/update/{id}', BookUpdateController::class)->name('books.update');
     Route::get('books/set-active/{id}', BookSetActiveController::class)->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->name('books.delete');
+
+    // Book Nlp
+    Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->name('books.calculate-embedding');
+    Route::get('books/calculate-sentiment', BookCalculateSentimentController::class)->name('books.calculate-sentiment');
 });
 
 Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');

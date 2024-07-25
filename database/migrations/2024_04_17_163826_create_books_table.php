@@ -18,12 +18,12 @@ return new class extends Migration
             $table->integer('year')->nullable();
             $table->string('catalog')->nullable();
             $table->string('color')->nullable();
+            $table->string('editorial')->nullable();
+            $table->string('city')->nullable();
             $table->boolean('active')->default(false);
-
+            $table->boolean('ready')->default(false);
 
             $table->foreignId('category_id')->constrained();
-            $table->foreignId('editorial_id')->constrained();
-            $table->foreignId('city_id')->constrained();
 
             $table->timestamps();
         });

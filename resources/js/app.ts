@@ -1,6 +1,6 @@
+import "./echo";
 import "./bootstrap";
 import "../css/app.css";
-import "./echo";
 
 import { createApp, h, DefineComponent } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
@@ -9,8 +9,6 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import PrimeVue from "primevue/config";
 import AuraNior from "./Themes/nior";
 import { i18nVue } from "laravel-vue-i18n";
-
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
     title: (title) => `${title}`,

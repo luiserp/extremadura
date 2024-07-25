@@ -6,9 +6,9 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript()]
-class CityDto extends Data
+class AuthorDto extends Data
 {
-    public int $id;
+    public int $auth;
     public string $name;
     public string $created_at;
     public string $updated_at;

@@ -59,6 +59,7 @@ XCircleIcon,
 XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { computed, watch } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     notification: {
@@ -103,18 +104,18 @@ const status = computed(() => {
 
 const goToLink = () => {
     emit("close");
-
     if (typeof props.notification?.link === "object") {
-        router.visit(props.notification?.link?.route);
+        router.visit(props.notification?.options?.link?.route);
     } else {
-        router.visit(props.notification.link);
+        router.visit(props.notification.options?.link);
     }
 };
 
 watch(
     () => props.notification,
     (notification) => {
-        if (notification?.link?.reload) {
+        console.log(notification);
+        if (notification?.options?.link?.reload) {
             router.reload();
         }
     }

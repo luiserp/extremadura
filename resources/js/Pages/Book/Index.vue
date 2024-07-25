@@ -4,8 +4,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
-import { router } from '@inertiajs/vue3';
+import { ArrowLeftIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
+import { Link, router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
@@ -16,6 +16,7 @@ import { useBook } from '@/Composables/Book/Book';
 import BookFilter from './Partials/BookFilter.vue';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { App } from '@/types/app';
+import Button from 'primevue/button';
 
 const props = defineProps({
     books: {
@@ -44,7 +45,7 @@ const currentPage = computed(() => {
     return props.books.per_page * (props.books.current_page - 1);
 });
 
-const { showBook, editBook, deleteBook } = useBook();
+const { showBook, editBook, deleteBook, calculateEmbedding, calculateSentiment } = useBook();
 
 const selected = ref<App.Dtos.BookDto | null>(null);
 watch(() => selected.value, (value) => {
@@ -62,6 +63,36 @@ const setStatus = (book: App.Dtos.BookDto) => {
 <template>
 
     <AppLayout :title="trans('book.books')">
+        <template #header>
+            <div class="flex justify-between items-center gap-2">
+                <div>
+
+                </div>
+                <div class="flex gap-2">
+                    <Dropdown width="66">
+                        <template #trigger>
+                            <Button
+                                class="flex justify-center items-center gap-2 text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
+                                {{ $t('common.actions') }}
+                                <CalculatorIcon class="h-6 w-6" />
+                            </Button>
+                        </template>
+                        <template #content>
+                            <DropdownLink @click="calculateEmbedding">
+                                <div class="flex gap-2">
+                                    {{ $t("book.calculate_embeddings") }}
+                                </div>
+                            </DropdownLink>
+                            <DropdownLink @click="calculateSentiment">
+                                <div class="flex gap-2">
+                                    {{ $t("book.calculate_sentiment") }}
+                                </div>
+                            </DropdownLink>
+                        </template>
+                    </Dropdown>
+                </div>
+            </div>
+        </template>
 
         <Container>
             <BookFilter :filters="props.filters" :books="books" :categories="categories" />
@@ -79,25 +110,15 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                 <p>{{ trans('book.authors') + ': ' }}</p>
                                 <div class="flex gap-2">
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
-                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
+                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '') }} </p>
                                 </div>
                             </div>
                             <div class="flex gap-2 mt-2">
-                                <span
-                                    :title="trans('book.has_sentiment')"
-                                    v-if="data.has_sentiment"
-                                >
-                                    <HeartIcon
-                                        class="h-5 w-5"
-                                        style="color: var(--p-text-color)" />
+                                <span :title="trans('book.has_sentiment')" v-if="data.has_sentiment">
+                                    <HeartIcon class="h-5 w-5" style="color: var(--p-text-color)" />
                                 </span>
-                                <span
-                                    :title="trans('book.has_embeddings')"
-                                    v-if="data.has_embeddings"
-                                >
-                                    <ListBulletIcon
-                                        class="h-5 w-5"
-                                        style="color: var(--p-text-color)" />
+                                <span :title="trans('book.has_embeddings')" v-if="data.has_embeddings">
+                                    <ListBulletIcon class="h-5 w-5" style="color: var(--p-text-color)" />
                                 </span>
                             </div>
                         </div>
@@ -128,14 +149,14 @@ const setStatus = (book: App.Dtos.BookDto) => {
                 <Column :header="trans('common.status')">
                     <template #body="{ data }">
                         <div class="flex justify-center">
-                            <ToggleSwitch v-model="data.active" @change="setStatus(data)"/>
+                            <ToggleSwitch v-model="data.active" @change="setStatus(data)" />
                         </div>
                     </template>
                 </Column>
                 <Column :header="trans('common.actions')">
                     <template #body="{ data }">
                         <div class="flex justify-center">
-                            <Dropdown width="24">
+                            <Dropdown>
                                 <template #trigger>
                                     <button
                                         class="flex text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
@@ -156,6 +177,16 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                     <DropdownLink @click="deleteBook(data.id)">
                                         <div class="flex gap-2">
                                             {{ $t("common.delete") }}
+                                        </div>
+                                    </DropdownLink>
+                                    <DropdownLink @click="calculateEmbedding(data)">
+                                        <div class="flex gap-2">
+                                            {{ $t("book.calculate_embeddings") }}
+                                        </div>
+                                    </DropdownLink>
+                                    <DropdownLink @click="calculateSentiment(data)">
+                                        <div class="flex gap-2">
+                                            {{ $t("book.calculate_sentiment") }}
                                         </div>
                                     </DropdownLink>
                                 </template>

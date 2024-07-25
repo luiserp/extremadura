@@ -36,22 +36,14 @@ class BookImport implements ToCollection, WithHeadingRow
                 ]);
             }
 
-            $editorial = Editorial::firstOrCreate([
-                'name' => $row['editorial'],
-            ]);
-
             $category = Category::firstOrCreate([
-                'name' => Str::upper($row['category']),
+                'name' => Str::upper(strtolower($row['category'])),
             ]);
 
 
             if ($row['city'] === '' || $row['city'] === null) {
                 $row['city'] = 'Desconocida';
             }
-
-            $city = City::firstOrCreate([
-                'name' => $row['city'],
-            ]);
 
             $book = Book::firstOrCreate(
                 [
@@ -61,9 +53,9 @@ class BookImport implements ToCollection, WithHeadingRow
                 [
                     'description' => $row['description'],
                     'catalog' => $row['catalog'],
-                    'editorial_id' => $editorial->id,
                     'category_id' => $category->id,
-                    'city_id' => $city->id,
+                    'editorial' => $row['editorial'],
+                    'city' => $row['city'],
                 ]
             );
 

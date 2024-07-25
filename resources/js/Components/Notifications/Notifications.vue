@@ -44,10 +44,11 @@ const remove = router.on("finish", () => {
 });
 
 onMounted(() => {
+
     // Real time notifications
     window.Echo.private('App.Models.User.' + userId.value)
         .subscribed(() => {
-            //
+            console.log('Subscribed to private channel');
         })
         .error((error) => {
             if (error.reason && error.reason["code"] == 40102) {

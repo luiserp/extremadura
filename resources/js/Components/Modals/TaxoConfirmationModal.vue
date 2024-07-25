@@ -31,7 +31,7 @@
                                     </button>
                                 </div>
                                 <!-- Content -->
-                                <div class="sm:flex sm:items-start">
+                                <div class="sm:flex sm:items-start justify-center">
                                     <!-- Main Content -->
                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                         <DialogTitle as="h3"
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                             <!-- Buttons -->
-                            <div class="gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row">
+                            <div class="gap-4 px-4 py-3 sm:px-6 sm:flex sm:flex-row justify-center">
                                 <template v-if="buttons.length > 0">
                                     <component v-for="button in buttons" :key="button.label" :is="Button"
                                         :severity="button.type == 'primary' ? 'primary' : 'secondary'" type="button"

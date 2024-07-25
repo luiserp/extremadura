@@ -11,15 +11,16 @@ title: string;
 description: string;
 year: string;
 catalog: string;
-active: boolean;
-category: App.Dtos.CategoryDto | null;
-editorial: App.Dtos.EditorialDto | null;
-authors: Array<App.Dtos.AuthorDto> | null;
-city: App.Dtos.CityDto | null;
-embedding: App.Dtos.BookEmbeddingDto | null;
-sentiment: App.Dtos.BookSentimentDto | null;
+editorial: string | null;
+city: string | null;
 has_embeddings: boolean | null;
 has_sentiment: boolean | null;
+active: boolean | null;
+ready: boolean | null;
+category: App.Dtos.CategoryDto | null;
+authors: Array<App.Dtos.AuthorDto> | null;
+embedding: App.Dtos.BookEmbeddingDto | null;
+sentiment: App.Dtos.BookSentimentDto | null;
 };
 export type BookEmbeddingDto = {
 id: number;
@@ -47,18 +48,6 @@ created_at: string;
 updated_at: string;
 };
 export type CategoryDto = {
-id: number;
-name: string;
-created_at: string;
-updated_at: string;
-};
-export type CityDto = {
-id: number;
-name: string;
-created_at: string;
-updated_at: string;
-};
-export type EditorialDto = {
 id: number;
 name: string;
 created_at: string;

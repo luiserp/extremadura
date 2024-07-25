@@ -14,14 +14,15 @@ class BookDto extends Data
     public string $description;
     public string $year;
     public string $catalog;
-    public bool $active;
-    public ?CategoryDto $category;
-    public ?EditorialDto $editorial;
-    #[DataCollectionOf(AuthorDto::class)]
-    public ?array $authors;
-    public ?CityDto $city;
-    public ?BookEmbeddingDto $embedding;
-    public ?BookSentimentDto $sentiment;
+    public ?string $editorial;
+    public ?string $city;
     public ?bool $has_embeddings;
     public ?bool $has_sentiment;
+    public ?bool $active;
+    public ?bool $ready;
+    public ?CategoryDto $category;
+    #[DataCollectionOf(AuthorDto::class)]
+    public ?array $authors;
+    public ?BookEmbeddingDto $embedding;
+    public ?BookSentimentDto $sentiment;
 }

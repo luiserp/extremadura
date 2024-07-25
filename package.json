@@ -22,9 +22,11 @@
         "vue-tsc": "^1.8.27"
     },
     "dependencies": {
+        "@ably/laravel-echo": "^1.0.5",
         "@headlessui/vue": "^1.7.22",
         "@heroicons/vue": "^2.1.5",
         "@primevue/themes": "^4.0.0",
+        "ably": "^1.2.50",
         "dayjs": "^1.11.12",
         "laravel-vue-i18n": "^2.7.7",
         "lodash": "^4.17.21",

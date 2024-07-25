@@ -370,7 +370,6 @@ const filtersOptionsRef = ref([]);
 
 // UI Control
 onMounted(() => {
-    console.log(props.filters)
     filtersOptionsRef.value = props.filtersOptions;
     parseFiltersFromProps();
 

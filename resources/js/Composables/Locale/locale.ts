@@ -12,6 +12,7 @@ export const useLocale = () => {
         language.value = lang;
         loadLanguageAsync(language.value);
         localStorage.setItem("locale", language.value);
+        document.cookie = "locale=" + language.value + ";path=/";
     };
 
     return {

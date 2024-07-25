@@ -70,10 +70,10 @@ const back = () => {
                         {{ trans('book.catalog') + ': ' + bookData.catalog }}
                     </p>
                     <p>
-                        {{ trans('book.editorial') + ': ' + bookData.editorial?.name }}
+                        {{ trans('book.editorial') + ': ' + bookData.editorial }}
                     </p>
                     <p>
-                        {{ trans('book.city') + ': ' + bookData.city?.name }}
+                        {{ trans('book.city') + ': ' + bookData.city }}
                     </p>
                     <p>
                         {{ trans('book.category') + ': ' + capitalizeWords(bookData.category?.name ?? '') }}

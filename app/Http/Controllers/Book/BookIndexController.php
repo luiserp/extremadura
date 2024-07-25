@@ -31,7 +31,7 @@ class BookIndexController extends Controller
 
         // Get books
         $books = Book::
-            with(['category', 'editorial', 'authors', 'city'])
+            with(['category', 'authors'])
             // Search
             ->when($filters->search, function ($query, $search) {
                 $query->where('title', 'like', "%$search%")
