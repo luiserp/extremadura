@@ -18,10 +18,17 @@ class BookGetActiveBook extends Controller
 
         Log::info('Get active book');
 
-        $book = Book::with(['category', 'editorial', 'authors', 'city', 'embedding', 'sentiment'])
+        $books = Book::with(['category', 'editorial', 'authors', 'city', 'embedding', 'sentiment'])
             ->where('active', true)
-            ->get()
-            ->random();
+            ->get();
+
+        if ($books->isEmpty()) {
+            return response()->json([
+                'message' => 'No active book found',
+            ], 404);
+        }
+
+        $book = $books->random();
 
         return response()->json(BookDto::from($book));
     }

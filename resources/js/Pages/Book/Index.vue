@@ -137,8 +137,8 @@ const setStatus = (book: App.Dtos.BookDto) => {
                         </div>
                     </template>
                 </Column>
-                <Column field="editorial.name" :header="trans('book.editorial')"></Column>
-                <Column field="city.name" :header="trans('book.city')"></Column>
+                <Column field="editorial" :header="trans('book.editorial')"></Column>
+                <Column field="city" :header="trans('book.city')"></Column>
                 <Column :header="trans('book.description')">
                     <template #body="{ data }">
                         <div class="truncate max-h-14 max-w-80">

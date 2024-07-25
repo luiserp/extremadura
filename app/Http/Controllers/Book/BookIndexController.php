@@ -35,15 +35,12 @@ class BookIndexController extends Controller
             // Search
             ->when($filters->search, function ($query, $search) {
                 $query->where('title', 'like', "%$search%")
+                    ->orWhere('city', 'like', "%$search%")
+                    ->orWhere('editorial', 'like', "%$search%")
                     ->orWhereHas('authors', function ($query) use ($search) {
                         $query->where('name', 'like', "%$search%");
-                    })
-                    ->orWhereHas('city', function ($query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
-                    })
-                    ->orWhereHas('editorial', function ($query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
                     });
+
             })->addSelect([
                 'has_embeddings' => BookEmbedding::selectRaw('count(*)')
                     ->whereColumn('book_id', 'books.id'),

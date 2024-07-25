@@ -19,7 +19,7 @@ class SetApplicationLocale
         $locale = Cookie::get('locale', 'en');
         $user = $request->user();
 
-        if ($user->locale && $user->locale !== $locale) {
+        if ($user && $user->locale && $user->locale !== $locale) {
             $user->update(['locale' => $locale]);
         }
 

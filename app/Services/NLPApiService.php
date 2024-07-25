@@ -31,7 +31,7 @@ class NLPApiService
                 'book_id' => $book->id,
             ], [
                 'embeddings_model' => $embeddings['model'],
-                'embeddings' => json_encode($embeddings['embeddings']),
+                'embeddings' => $embeddings['embeddings'],
             ]);
         }
     }
