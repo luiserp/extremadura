@@ -11,6 +11,7 @@ return [
     'editorial' => 'Editorial',
     'authors' => 'Authors',
     'city' => 'City',
+    'reference' => 'Referencia',
 
     // Actions
     'delete_book' => 'Delete book',
@@ -24,6 +25,9 @@ return [
     'calculate_sentiment' => 'Calculate sentiment',
     'calculate_sentiment_subtitle' => 'Are you sure you want to calculate the sentiments?',
     'calculate_sentiment_message' => 'This action will take some time, once calculated, we will send you a notification.',
+
+    'data_check_ok' => 'Data check OK',
+    'data_check_error' => 'Data check error',
 
     // Messages
     'book_created' => 'Book created correctly.',

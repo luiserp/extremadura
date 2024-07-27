@@ -41,4 +41,5 @@ return [
     'new' => 'New',
     'metadata' => 'Metadata',
     'status' => 'Status',
+    'check' => 'Check',
 ];

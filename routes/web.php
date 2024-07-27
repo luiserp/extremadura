@@ -5,6 +5,7 @@ use App\Http\Controllers\Book\BookIndexController;
 use App\Http\Controllers\Book\BookDetailController;
 use App\Http\Controllers\Book\BookEditController;
 use App\Http\Controllers\Book\Api\BookGetActiveBook;
+use App\Http\Controllers\Book\BookAskAssistantController;
 use App\Http\Controllers\Book\BookCalculateEmbeddingController;
 use App\Http\Controllers\Book\BookCalculateSentimentController;
 use App\Http\Controllers\Book\BookSetActiveController;
@@ -43,9 +44,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/books', BookIndexController::class)->name('books.index');
     Route::get('books/detail/{id}', BookDetailController::class)->name('books.detail');
     Route::get('books/edit/{id}', BookEditController::class)->name('books.edit');
-    Route::get('books/update/{id}', BookUpdateController::class)->name('books.update');
+    Route::put('books/update/{id}', BookUpdateController::class)->name('books.update');
     Route::get('books/set-active/{id}', BookSetActiveController::class)->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->name('books.delete');
+
+    Route::get('books/check-data', BookAskAssistantController::class)->name('books.check-data');
 
     // Book Nlp
     Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->name('books.calculate-embedding');

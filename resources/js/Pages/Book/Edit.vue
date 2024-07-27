@@ -9,24 +9,36 @@ import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
 import Panel from 'primevue/panel';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import InputText from 'primevue/inputtext';
+import Select from 'primevue/select';
+import Textarea from 'primevue/textarea';
 
 const props = defineProps({
     book: {
         type: Object as () => App.Dtos.BookDto,
         required: true
     },
+    categories: {
+        type: Array as () => App.Dtos.CategoryDto[],
+        required: true
+}
 });
 
 const bookData = computed(() => {
     return props.book
 });
 
-const { form, showBook, editBook, deleteBook, updateBook } = useBook();
+const { form, setForm, showBook, checkBook, editBook, deleteBook, updateBook } = useBook();
 
 const back = () => {
     showBook(bookData.value.id);
 };
+
+
+onMounted(() => {
+    setForm(props.book);
+});
 
 </script>
 
@@ -41,6 +53,9 @@ const back = () => {
                     </Button>
                 </div>
                 <div class="flex gap-2">
+                    <Button @click="checkBook(bookData)" outlined>
+                        {{ trans('common.check') }}
+                    </Button>
                     <Button @click="back()" severity="secondary" outlined>
                         {{ trans('common.cancel') }}
                     </Button>
@@ -54,39 +69,55 @@ const back = () => {
         <Container>
             <div class="flex justify-between flex-wrap">
                 <div class="flex-auto space-y-2">
-                    <h1 class="text-xl font-bold">{{ bookData.title }}</h1>
+                    <div class="flex gap-2 items-center text-xl font-bold">
+                        <InputText id="year" type="text" v-model="form.title" />
+                    </div>
                     <div class="flex gap-2 flex-col">
-                        <p v-for="author in bookData.authors">
-                            {{ author.name }}
-                        </p>
+                        <template v-for="author, idx in form.authors">
+                            <h2>{{ trans('book.authors') }}</h2>
+                            <div class="flex gap-2 items-center">
+                                <InputText id="author" type="text" v-model="form.authors[idx].name" size="small" />
+                            </div>
+                        </template>
                     </div>
                 </div>
-                <div class="flex-auto space-y-2 text-sm">
+                <div class="flex-auto space-y-2">
                     <h1 class="text-xl font-bold">{{ trans('common.metadata') }}</h1>
-                    <p>
-                        {{ trans('book.year') + ': ' + bookData.year }}
-                    </p>
-                    <p>
-                        {{ trans('book.catalog') + ': ' + bookData.catalog }}
-                    </p>
-                    <p>
-                        {{ trans('book.editorial') + ': ' + bookData.editorial }}
-                    </p>
-                    <p>
-                        {{ trans('book.city') + ': ' + bookData.city }}
-                    </p>
-                    <p>
-                        {{ trans('book.category') + ': ' + capitalizeWords(bookData.category?.name ?? '') }}
-                    </p>
+                    <div class="flex gap-2 items-center">
+                        <label for="year">{{ trans('book.year') }}</label>
+                        <InputText id="year" type="text" v-model="form.year" size="small" />
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <label for="catalog">{{ trans('book.catalog') }}</label>
+                        <InputText id="catalog" type="text" v-model="form.catalog" size="small" />
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <label for="editorial">{{ trans('book.editorial') }}</label>
+                        <InputText id="editorial" type="text" v-model="form.editorial" size="small" />
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <label for="city">{{ trans('book.city') }}</label>
+                        <InputText id="city" type="text" v-model="form.city" size="small" />
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <label for="category">{{ trans('book.category') }}</label>
+                        <Select id="category" v-model="form.category" :options="categories" optionLabel="name" />
+                    </div>
                 </div>
             </div>
             <div class="mt-4 space-y-2">
-                <Panel :header="trans('book.description')" toggleable>
-                    <p class="text-base">
-                        {{ bookData.description }}
-                    </p>
-                </Panel>
+                <h2 class="ml-4 font-semibold">{{ trans('book.description') }}</h2>
+                <Textarea v-model="form.description" rows="8" cols="30" class="w-full" />
             </div>
+            <div class="mt-4 space-y-2">
+                <h2 class="ml-4 font-semibold">{{ trans('book.reference') }}</h2>
+                <Textarea v-model="form.reference" rows="8" cols="30" class="w-full" />
+            </div>
+
+            <pre>
+                {{ bookData }}
+            </pre>
+
         </Container>
 
     </AppLayout>

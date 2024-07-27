@@ -56,6 +56,7 @@ class BookImport implements ToCollection, WithHeadingRow
                     'category_id' => $category->id,
                     'editorial' => $row['editorial'],
                     'city' => $row['city'],
+                    'reference' => $row['reference'],
                 ]
             );
 

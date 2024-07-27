@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->string('editorial')->nullable();
             $table->string('city')->nullable();
+            $table->text('reference')->nullable();
             $table->boolean('active')->default(false);
             $table->boolean('ready')->default(false);
 

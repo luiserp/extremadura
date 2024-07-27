@@ -3,13 +3,52 @@
 namespace App\Services;
 
 use App\Dtos\BookDto;
+use App\Exceptions\Book\ErrorParsingDataCheckResponseExeption;
 use App\Models\Books\BookEmbedding;
 use App\Models\Books\BookSentiment;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class NLPApiService
 {
+    /**
+     * Calculate embeddings for books
+     * @param array|Collection<BookDto> $books
+     * @return void
+     */
+    public function askAssistant($books)
+    {
+        for ($i = 0; $i < count($books); $i++) {
+            $book = $books[$i];
+            $reference = $book->reference;
+
+            $response = Http::timeout(320)->post(config('services.nlp.url'). '/data-checker', [
+                'text' => $reference
+            ]);
+
+            $dataChecker = $response->json();
+
+            try {
+
+                $json = json_decode($dataChecker['data']['data'], true);
+
+                if ($json) {
+                    $book->update([
+                        'year' => $json['year'],
+                        'city' => $json['city'],
+                        'editorial' => $json['editorial'],
+                    ]);
+                }
+
+            } catch (\Exception $e) {
+                // Handle exception
+                Log::error($e->getMessage());
+                throw new ErrorParsingDataCheckResponseExeption();
+            }
+        }
+    }
+
     /**
      * Calculate embeddings for books
      * @param array|Collection<BookDto> $books

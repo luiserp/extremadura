@@ -10,6 +10,7 @@ import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
 import Panel from 'primevue/panel';
 import { computed } from 'vue';
+import Textarea from 'primevue/textarea';
 
 const props = defineProps({
     book: {
@@ -22,7 +23,7 @@ const bookData = computed(() => {
     return props.book
 });
 
-const { showBook, editBook, deleteBook } = useBook();
+const { showBook, editBook, checkBook, deleteBook } = useBook();
 
 </script>
 
@@ -33,12 +34,15 @@ const { showBook, editBook, deleteBook } = useBook();
             <div class="flex justify-between items-center gap-2">
                 <div>
                     <Link :href="route('books.index')">
-                        <Button>
-                            <ArrowLeftIcon class="h-5 w-5" />
-                        </Button>
+                    <Button>
+                        <ArrowLeftIcon class="h-5 w-5" />
+                    </Button>
                     </Link>
                 </div>
                 <div class="flex gap-2">
+                    <Button @click="checkBook(bookData)" outlined>
+                        {{ trans('common.check') }}
+                    </Button>
                     <Button @click="editBook(bookData.id)">
                         {{ trans('common.edit') }}
                     </Button>
@@ -54,12 +58,13 @@ const { showBook, editBook, deleteBook } = useBook();
                 <div class="flex-auto space-y-2">
                     <h1 class="text-xl font-bold">{{ bookData.title }}</h1>
                     <div class="flex gap-2 flex-col">
+                        <h2>{{ trans('book.authors') }}</h2>
                         <p v-for="author in bookData.authors">
                             {{ author.name }}
                         </p>
                     </div>
                 </div>
-                <div class="flex-auto space-y-2 text-sm">
+                <div class="flex-auto space-y-2">
                     <h1 class="text-xl font-bold">{{ trans('common.metadata') }}</h1>
                     <p>
                         {{ trans('book.year') + ': ' + bookData.year }}
@@ -79,13 +84,13 @@ const { showBook, editBook, deleteBook } = useBook();
                 </div>
             </div>
             <div class="mt-4 space-y-2">
-                <Panel :header="trans('book.description')" toggleable>
-                    <p class="text-base">
-                        {{ bookData.description }}
-                    </p>
-                </Panel>
+                <h2 class="ml-4 font-semibold">{{ trans('book.description') }}</h2>
+                <Textarea v-model="bookData.description" rows="8" cols="30" class="w-full" readonly />
+            </div>
+            <div class="mt-4 space-y-2">
+                <h2 class="ml-4 font-semibold">{{ trans('book.reference') }}</h2>
+                <Textarea v-model="bookData.reference" rows="8" cols="30" class="w-full" readonly />
             </div>
         </Container>
-
     </AppLayout>
 </template>
