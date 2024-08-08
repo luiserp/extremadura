@@ -4,7 +4,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowLeftIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
+import { ArrowDownOnSquareIcon, ArrowLeftIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
 import { Link, router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Column from 'primevue/column';
@@ -69,6 +69,12 @@ const setStatus = (book: App.Dtos.BookDto) => {
 
                 </div>
                 <div class="flex gap-2">
+                    <a :href="route('books.export')">
+                        <Button severity="secondary" outlined>
+                            {{ $t('common.export') }}
+                            <ArrowDownOnSquareIcon class="h-6 w-6" />
+                        </Button>
+                    </a>
                     <Dropdown width="66">
                         <template #trigger>
                             <Button
@@ -110,7 +116,7 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                 <p>{{ trans('book.authors') + ': ' }}</p>
                                 <div class="flex gap-2">
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
-                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '') }} </p>
+                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
                                 </div>
                             </div>
                             <div class="flex gap-2 mt-2">

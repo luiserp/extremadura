@@ -2,6 +2,7 @@
 
 return [
     'select' => 'Select',
+    'export' => 'Export',
     'saved' => 'Saved.',
     'save' => 'Save',
     'home' => 'Home',

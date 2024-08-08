@@ -8,6 +8,7 @@ use App\Http\Controllers\Book\Api\BookGetActiveBook;
 use App\Http\Controllers\Book\BookAskAssistantController;
 use App\Http\Controllers\Book\BookCalculateEmbeddingController;
 use App\Http\Controllers\Book\BookCalculateSentimentController;
+use App\Http\Controllers\Book\BookExportController;
 use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
 use App\Http\Controllers\Navigation\NavigationController;
@@ -47,6 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('books/update/{id}', BookUpdateController::class)->name('books.update');
     Route::get('books/set-active/{id}', BookSetActiveController::class)->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->name('books.delete');
+    Route::get('books/export', BookExportController::class)->name('books.export');
 
     Route::get('books/check-data', BookAskAssistantController::class)->name('books.check-data');
 
