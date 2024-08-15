@@ -7,5 +7,6 @@ return [
     'logout' => 'Cerrar Sesión',
     'settings' => 'Configuración',
     'language' => 'Idioma',
-
+    'login' => 'Iniciar Sesión',
+    'register' => 'Registrarse',
 ];

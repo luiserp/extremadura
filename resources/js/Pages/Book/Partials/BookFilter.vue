@@ -10,6 +10,8 @@ import { Paginator as TypePaginator } from '@/types/paginator';
 import { capitalizeWords } from "@/Services/Utils";
 import { trans } from "laravel-vue-i18n";
 import { App } from '@/types/app';
+import { route } from 'ziggy-js'
+import { can } from "@/Utils/roles";
 
 const props = defineProps({
     books: {
@@ -50,18 +52,20 @@ const filtersOptions = computed(() => {
 
     filters.push(categories);
 
-    // Status
-    const status = {
-        id: "status",
-        name: trans('filters.status'),
-        multiple: false,
-        options: [
-            { value: 1, label: trans('filters.active'), checked: false },
-            { value: 0, label: trans('filters.inactive'), checked: false },
-        ] as FilterOption[],
-    };
+    if (can('edit books')) {
+        // Status
+        const status = {
+            id: "status",
+            name: trans('filters.status'),
+            multiple: false,
+            options: [
+                { value: 1, label: trans('filters.active'), checked: false },
+                { value: 0, label: trans('filters.inactive'), checked: false },
+            ] as FilterOption[],
+        };
 
-    filters.push(status);
+        filters.push(status);
+    }
 
     return filters;
 });

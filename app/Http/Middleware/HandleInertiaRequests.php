@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
@@ -33,12 +34,14 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()?->loadMissing('roles.permissions'),
             ],
             'flash' => [
                 'notifications' => fn () => $request->session()->get('notifications'),
             ],
             'locale' => Session::get('locale'),
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
         ];
     }
 }

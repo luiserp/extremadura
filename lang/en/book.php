@@ -11,7 +11,7 @@ return [
     'editorial' => 'Editorial',
     'authors' => 'Authors',
     'city' => 'City',
-    'reference' => 'Referencia',
+    'reference' => 'Full Reference',
 
     // Actions
     'delete_book' => 'Delete book',

@@ -15,10 +15,12 @@ class BooksSeeder extends Seeder
      */
     public function run(): void
     {
-
+        // File 1
         $file = 'books/books.csv';
-
         Excel::import(new BookImport, $file);
 
+        // File 2
+        $file = 'books/2022-23.csv';
+        Excel::import(new BookImport, $file);
     }
 }

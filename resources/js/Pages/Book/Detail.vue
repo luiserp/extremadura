@@ -3,14 +3,14 @@ import Container from '@/Components/Container/Container.vue';
 import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
-import { App } from '@/types/app';
+import { can } from '@/Utils/roles';
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
 import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
-import Panel from 'primevue/panel';
-import { computed } from 'vue';
 import Textarea from 'primevue/textarea';
+import { computed } from 'vue';
+import { route } from 'ziggy-js';
 
 const props = defineProps({
     book: {
@@ -39,7 +39,9 @@ const { showBook, editBook, checkBook, deleteBook } = useBook();
                     </Button>
                     </Link>
                 </div>
-                <div class="flex gap-2">
+                <div
+                    v-if="can('edit books')"
+                    class="flex gap-2">
                     <Button @click="checkBook(bookData)" outlined>
                         {{ trans('common.check') }}
                     </Button>

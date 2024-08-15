@@ -27,7 +27,7 @@ class BookIndexController extends Controller
         // Get data from request
         $filters = BookFilterDto::from($request->toArray());
         $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 15);
 
         // Get books
         $books = Book::

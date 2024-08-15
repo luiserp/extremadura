@@ -13,6 +13,7 @@ import { computed, onMounted } from 'vue';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
+import { can } from '@/Utils/roles';
 
 const props = defineProps({
     book: {
@@ -52,7 +53,9 @@ onMounted(() => {
                         <ArrowLeftIcon class="h-5 w-5" />
                     </Button>
                 </div>
-                <div class="flex gap-2">
+                <div
+                    v-if="can('edit books')"
+                    class="flex gap-2">
                     <Button @click="checkBook(bookData)" outlined>
                         {{ trans('common.check') }}
                     </Button>

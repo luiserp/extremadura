@@ -1,22 +1,23 @@
 <script setup lang="ts">
+import Container from "@/Components/Container/Container.vue";
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowDownOnSquareIcon, ArrowLeftIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
-import { Link, router } from '@inertiajs/vue3';
+import { ArrowDownOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
+import { router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
+import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Paginator from 'primevue/paginator';
-import { computed, ref, watch } from 'vue';
-import Container from "@/Components/Container/Container.vue";
-import { useBook } from '@/Composables/Book/Book';
-import BookFilter from './Partials/BookFilter.vue';
 import ToggleSwitch from 'primevue/toggleswitch';
-import { App } from '@/types/app';
-import Button from 'primevue/button';
+import { computed, ref, watch } from 'vue';
+import BookFilter from './Partials/BookFilter.vue';
+import { route } from 'ziggy-js'
+import { can } from "@/Utils/roles";
 
 const props = defineProps({
     books: {
@@ -75,7 +76,7 @@ const setStatus = (book: App.Dtos.BookDto) => {
                             <ArrowDownOnSquareIcon class="h-6 w-6" />
                         </Button>
                     </a>
-                    <Dropdown width="66">
+                    <Dropdown v-if="can('edit books')" width="66">
                         <template #trigger>
                             <Button
                                 class="flex justify-center items-center gap-2 text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
@@ -112,11 +113,11 @@ const setStatus = (book: App.Dtos.BookDto) => {
                         <div :title="data.title" class="truncate max-h-18 max-w-80">
                             {{ data.title }}
 
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 items-baseline">
                                 <p>{{ trans('book.authors') + ': ' }}</p>
                                 <div class="flex gap-2">
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
-                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
+                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '') }} </p>
                                 </div>
                             </div>
                             <div class="flex gap-2 mt-2">
@@ -152,7 +153,7 @@ const setStatus = (book: App.Dtos.BookDto) => {
                         </div>
                     </template>
                 </Column>
-                <Column :header="trans('common.status')">
+                <Column v-if="can('edit books')" :header="trans('common.status')">
                     <template #body="{ data }">
                         <div class="flex justify-center">
                             <ToggleSwitch v-model="data.active" @change="setStatus(data)" />
@@ -175,22 +176,30 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                             {{ $t("common.show") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink @click="editBook(data.id)">
+                                    <DropdownLink
+                                        v-if="can('edit books')"
+                                        @click="editBook(data.id)">
                                         <div class="flex gap-2">
                                             {{ $t("common.edit") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink @click="deleteBook(data.id)">
+                                    <DropdownLink
+                                        v-if="can('delete books')"
+                                        @click="deleteBook(data.id)">
                                         <div class="flex gap-2">
                                             {{ $t("common.delete") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink @click="calculateEmbedding(data)">
+                                    <DropdownLink
+                                        v-if="can('edit books')"
+                                        @click="calculateEmbedding(data)">
                                         <div class="flex gap-2">
                                             {{ $t("book.calculate_embeddings") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink @click="calculateSentiment(data)">
+                                    <DropdownLink
+                                        v-if="can('edit books')"
+                                        @click="calculateSentiment(data)">
                                         <div class="flex gap-2">
                                             {{ $t("book.calculate_sentiment") }}
                                         </div>

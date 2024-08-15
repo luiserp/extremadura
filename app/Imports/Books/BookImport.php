@@ -21,11 +21,11 @@ class BookImport implements ToCollection, WithHeadingRow
     {
         foreach ($collection as $row) {
 
-            if ($row['author'] === '' || $row['editorial'] === '' || $row['category'] === '' || $row['title'] === ''
-                || $row['author'] === null || $row['editorial'] === null || $row['category'] === null || $row['title'] === null
-            ) {
-                continue;
-            }
+            // if ($row['author'] === '' || $row['editorial'] === '' || $row['category'] === '' || $row['title'] === ''
+            //     || $row['author'] === null || $row['editorial'] === null || $row['category'] === null || $row['title'] === null
+            // ) {
+            //     continue;
+            // }
 
             $authorsRows = explode(';', $row['author']);
             $authors = [];
@@ -36,10 +36,15 @@ class BookImport implements ToCollection, WithHeadingRow
                 ]);
             }
 
-            $category = Category::firstOrCreate([
-                'name' => Str::upper(strtolower($row['category'])),
-            ]);
-
+            if (array_key_exists('category', $row->toArray())) {
+                $category = Category::firstOrCreate([
+                    'name' => Str::upper(strtolower($row['category'])),
+                ]);
+            } else {
+                $category = Category::firstOrCreate([
+                    'name' => 'Desconocida',
+                ]);
+            }
 
             if ($row['city'] === '' || $row['city'] === null) {
                 $row['city'] = 'Desconocida';
@@ -51,7 +56,7 @@ class BookImport implements ToCollection, WithHeadingRow
                     'year' => $row['year'],
                 ],
                 [
-                    'description' => $row['description'],
+                    'description' => array_key_exists('description', $row->toArray()) ? $row['description'] : null,
                     'catalog' => $row['catalog'],
                     'category_id' => $category->id,
                     'editorial' => $row['editorial'],

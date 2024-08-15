@@ -1,20 +1,17 @@
 <script setup>
+import Container from "@/Components/Container/Container.vue";
 import DialogWrapper from "@/Components/DialogWrapper/DialogWrapper.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import Notifications from "@/Components/Notifications/Notifications.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { SunIcon } from "@heroicons/vue/24/outline";
-import { MoonIcon } from "@heroicons/vue/24/outline";
-import { HomeIcon } from "@heroicons/vue/24/outline";
-import { Head, Link, router } from "@inertiajs/vue3";
-import { ref } from "vue";
-import { trans } from 'laravel-vue-i18n'
-import { LanguageIcon } from "@heroicons/vue/24/outline";
 import { useColorScheme } from "@/Composables/ColorScheme/colorScheme";
-import Container from "@/Components/Container/Container.vue";
 import { useLocale } from "@/Composables/Locale/locale";
+import { HomeIcon, LanguageIcon } from "@heroicons/vue/24/outline";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { trans } from 'laravel-vue-i18n';
+import { computed, ref } from "vue";
 
 defineProps({
     title: String,
@@ -23,6 +20,8 @@ defineProps({
         default: "books.index",
     },
 });
+
+const page = usePage();
 
 const showingNavigationDropdown = ref(false);
 
@@ -33,6 +32,14 @@ const logout = () => {
 const { changeLanguage } = useLocale();
 
 const { colorScheme, toggleColorScheme } = useColorScheme();
+
+const canLogin = computed(() => {
+    return page.props.canLogin;
+});
+
+const canRegister = computed(() => {
+    return page.props.canRegister;
+});
 
 </script>
 
@@ -54,9 +61,9 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex items-center shrink-0">
-                                <Link :href="route(homePath)">
-                                {{ trans('nav.home') }}
-                                </Link>
+                                <NavLink :href="route(homePath)">
+                                    <HomeIcon class="h-6 w-6" style="color: var(--p-text-color)" />
+                                </NavLink>
                             </div>
                         </div>
 
@@ -64,15 +71,10 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                             <!-- Navigation Links sm:flex -->
                             <div class="hidden mx-2 space-x-4 sm:-my-px sm:ms-10 sm:flex">
 
-                                <NavLink :href="route(homePath)">
-                                    <HomeIcon class="h-6 w-6" style="color: var(--p-text-color)" />
-
-                                </NavLink>
-
-                                <button @click="toggleColorScheme">
+                                <!-- <button @click="toggleColorScheme">
                                     <component :is="colorScheme === 'light' ? MoonIcon : SunIcon" class="h-6 w-6"
                                         style="color: var(--p-text-color)" />
-                                </button>
+                                </button> -->
 
                                 <!-- Lang -->
                                 <Dropdown>
@@ -95,7 +97,7 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
 
                             </div>
                             <!-- Profile Settings Dropdown -->
-                            <div class="relative">
+                            <div v-if="$page.props.auth.user" class="relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button
@@ -105,9 +107,9 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')">
+                                        <!-- <DropdownLink :href="route('profile.edit')">
                                             {{ $t("nav.profile") }}
-                                        </DropdownLink>
+                                        </DropdownLink> -->
 
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
@@ -118,7 +120,21 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                                     </template>
                                 </Dropdown>
                             </div>
+                            <div v-else-if="canLogin" class="sm:top-0 sm:right-0 p-6 text-end">
+                                <Link v-if="$page.props.auth.user" :href="route('books.index')"
+                                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                                {{ trans('nav.home') }}</Link>
 
+                                <template v-else>
+                                    <Link :href="route('login')"
+                                        class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                                    {{ trans('nav.login') }}</Link>
+
+                                    <Link v-if="canRegister" :href="route('register')"
+                                        class="ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                                    {{ trans('nav.register') }}</Link>
+                                </template>
+                            </div>
                         </div>
 
                         <!-- Hamburger -->
@@ -160,7 +176,7 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
+                    <div v-if="$page.props.auth.user" class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
                             <div>
                                 <div class="text-base font-medium text-gray-800 capitalize">
@@ -173,9 +189,9 @@ const { colorScheme, toggleColorScheme } = useColorScheme();
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')" :active="route().current('profile.edit')">
+                            <!-- <ResponsiveNavLink :href="route('profile.edit')" :active="route().current('profile.edit')">
                                 {{ $t("nav.profile") }}
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> -->
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">

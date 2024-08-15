@@ -7,4 +7,6 @@ return [
     'logout' => 'Log Out',
     'settings' => 'Settings',
     'language' => 'Languaje',
+    'login' => 'Log In',
+    'register' => 'Register',
 ];
