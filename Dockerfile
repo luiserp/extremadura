@@ -17,9 +17,9 @@ RUN docker-php-ext-install pdo pdo_mysql \
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-#USER root
+USER root
 
-#RUN chmod 777 -R /var/www/
+RUN chmod 777 -R /var/www/
 
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
