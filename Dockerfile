@@ -7,7 +7,6 @@ RUN apk update && apk add \
     curl \
     libpng-dev \
     libxml2-dev \
-    pcntl \
     php-gd \
     zip \
     unzip \
@@ -26,4 +25,9 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 WORKDIR /var/www
+
+RUN docker-php-ext-install pcntl
+RUN composer install
+RUN npm install
+
 USER $user
