@@ -7,6 +7,8 @@ RUN apk update && apk add \
     curl \
     libpng-dev \
     libxml2-dev \
+    pcntl \
+    php-gd \
     zip \
     unzip \
     shadow  # Add shadow package to install useradd
