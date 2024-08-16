@@ -39,16 +39,16 @@ Route::get('books/export', BookExportController::class)->name('books.export');
 
 Route::group(['middleware' => 'auth'], function () {
     // Books
-    Route::get('books/edit/{id}', BookEditController::class)->middleware('can:update,book')->name('books.edit');
+    Route::get('books/edit/{id}', BookEditController::class)->middleware('can:update,App\Models\Book')->name('books.edit');
     Route::put('books/update/{id}', BookUpdateController::class)->middleware('can:update,book')->name('books.update');
-    Route::get('books/set-active/{id}', BookSetActiveController::class)->middleware('can:update,book')->name('books.set-active');
-    Route::delete('books/delete/{id}', BookDeleteController::class)->middleware('can:delete,book')->name('books.delete');
+    Route::get('books/set-active/{id}', BookSetActiveController::class)->middleware('can:update,App\Models\Book')->name('books.set-active');
+    Route::delete('books/delete/{id}', BookDeleteController::class)->middleware('can:delete,App\Models\Book')->name('books.delete');
 
-    Route::get('books/check-data', BookAskAssistantController::class)->middleware('can:update,book')->name('books.check-data');
+    Route::get('books/check-data', BookAskAssistantController::class)->middleware('can:update,App\Models\Book')->name('books.check-data');
 
     // Book Nlp
-    Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->middleware('can:update,book')->name('books.calculate-embedding');
-    Route::get('books/calculate-sentiment', BookCalculateSentimentController::class)->middleware('can:update,book')->name('books.calculate-sentiment');
+    Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-embedding');
+    Route::get('books/calculate-sentiment', BookCalculateSentimentController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-sentiment');
 });
 
 Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');
