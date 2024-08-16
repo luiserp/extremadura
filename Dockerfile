@@ -27,7 +27,5 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 RUN docker-php-ext-install pcntl
-RUN composer install
-RUN npm install
 
 USER $user
