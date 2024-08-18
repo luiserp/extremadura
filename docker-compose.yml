@@ -3,16 +3,18 @@ services:
 ####################################################################################################
 # app
 ####################################################################################################
-  app:
+  app-extremadura:
     build:
       args:
         user: developer
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: app
+    image: app-extremadura
     container_name: app-extremadura
     restart: unless-stopped
+    links:
+      - mysql-extremadura
     environment:
       VIRTUAL_HOST: extremadura.cultureplex.co
     working_dir: /var/www/
@@ -20,15 +22,15 @@ services:
       - ./:/var/www
       - ~/.ssh:/root/.ssh
     depends_on:
-      - db
-      - redis
+      - mysql-extremadura
+      - redis-extremadura
     networks:
       - laravel
 
 ####################################################################################################
 # DATABASE (MySQL)
 ####################################################################################################
-  db:
+  mysql-extremadura:
     image: mysql:8.0
     container_name: mysql-extremadura
     restart: unless-stopped
@@ -47,10 +49,11 @@ services:
       - ./docker-compose/mysql/ql:/docker-entrypoint-initdb.d
     networks:
       - laravel
+
 ####################################################################################################
 # Nginx
 ####################################################################################################
-  nginx:
+  nginx-extremadura:
     image: nginx:alpine
     container_name: nginx-extremadura
     restart: unless-stopped
@@ -68,16 +71,16 @@ services:
 ####################################################################################################
 # phpMyAdmin
 ####################################################################################################
-  phpmyadmin:
+  phpmyadmin-extremadura:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin-extremadura
     ports:
         - 8080:80
     links:
-        - db
+        - mysql-extremadura
     restart: unless-stopped
     environment:
-        PMA_HOST: db
+        PMA_HOST: mysql-extremadura
         #PMA_USER: ${DB_USERNAME}
         #PMA_PASSWORD: ${DB_PASSWORD}
         PMA_PORT: 3306
@@ -88,7 +91,7 @@ services:
  ####################################################################################################
 # Redis
 ####################################################################################################
-  redis:
+  redis-extremadura:
     image: "redis:alpine"
     container_name: redis-extremadura
     restart: unless-stopped
@@ -98,6 +101,7 @@ services:
       - "6379:6379"
     networks:
       - laravel
+
 networks:
   laravel:
     driver: bridge
