@@ -12,7 +12,7 @@ RUN apk update && apk add \
     unzip \
     shadow  # Add shadow package to install useradd
 
-RUN docker-php-ext-install pdo pdo_mysql \
+RUN docker-php-ext-install pdo pdo_mysql pcntl \
     && apk --no-cache add nodejs npm
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -24,8 +24,7 @@ RUN chmod 777 -R /var/www/
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
-WORKDIR /var/www
 
-RUN docker-php-ext-install pcntl
+WORKDIR /var/www
 
 USER $user
