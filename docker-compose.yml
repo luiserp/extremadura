@@ -44,6 +44,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
       MYSQL_ROOT_HOST: '%'
+      MYSQL_HOST: '%'
     volumes:
       - ./docker-compose/mysql/data:/var/lib/mysql
       - ./docker-compose/mysql/logs:/var/log/mysql
