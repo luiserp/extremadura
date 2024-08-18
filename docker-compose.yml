@@ -19,7 +19,7 @@ services:
       VIRTUAL_HOST: extremadura.cultureplex.co
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - app-extremadura:/var/www
       - ~/.ssh:/root/.ssh
     depends_on:
       - mysql-extremadura
@@ -46,10 +46,8 @@ services:
       MYSQL_HOST: '%' # Allow connections from any host
       MYSQL_ROOT_HOST: '%' # Allow connections from any host
     volumes:
-      - ./docker-compose/mysql/data:/var/lib/mysql
-      - ./docker-compose/mysql/logs:/var/log/mysql
-      - ./docker-compose/mysql/ql:/docker-entrypoint-initdb.d
-      - ./docker-compose/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - mysql-extremadura/var/lib/mysql:/var/lib/mysql
+      - mysql-extremadura/var/log/mysql:/var/log/mysql
     networks:
       - laravel
 
@@ -64,7 +62,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./:/var/www
+      - app-extremadura:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
       - ./docker-compose/nginx/ssl:/etc/nginx/conf.d/ssl
       - ./docker-compose/nginx/phpMyAdmin.conf:/etc/nginx/conf.d/phpMyAdmin.conf
@@ -108,3 +106,8 @@ services:
 networks:
   laravel:
     driver: bridge
+
+volumes:
+  mysql-extremadura:
+  redis-extremadura:
+  app-extremadura:

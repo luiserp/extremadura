@@ -42,3 +42,6 @@ RUN composer install
 RUN npm install
 
 RUN npm run build
+
+EXPOSE 9000
+CMD ["php-fpm"]
