@@ -43,7 +43,8 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-      MYSQL_HOST: mysql-extremadura
+      MYSQL_HOST: '%' # Allow connections from any host
+      MYSQL_ROOT_HOST: '%' # Allow connections from any host
     volumes:
       - ./docker-compose/mysql/data:/var/lib/mysql
       - ./docker-compose/mysql/logs:/var/log/mysql
