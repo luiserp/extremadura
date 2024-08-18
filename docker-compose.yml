@@ -48,6 +48,7 @@ services:
       - ./docker-compose/mysql/data:/var/lib/mysql
       - ./docker-compose/mysql/logs:/var/log/mysql
       - ./docker-compose/mysql/ql:/docker-entrypoint-initdb.d
+      - ./docker-compose/mysql/config/my.cnf:/etc/mysql/my.cnf
     networks:
       - laravel
 
