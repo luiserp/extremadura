@@ -40,7 +40,7 @@ Route::get('books/export', BookExportController::class)->name('books.export');
 Route::group(['middleware' => 'auth'], function () {
     // Books
     Route::get('books/edit/{id}', BookEditController::class)->middleware('can:update,App\Models\Book')->name('books.edit');
-    Route::put('books/update/{id}', BookUpdateController::class)->middleware('can:update,book')->name('books.update');
+    Route::put('books/update/{id}', BookUpdateController::class)->middleware('can:update,App\Models\Book')->name('books.update');
     Route::get('books/set-active/{id}', BookSetActiveController::class)->middleware('can:update,App\Models\Book')->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->middleware('can:delete,App\Models\Book')->name('books.delete');
 
