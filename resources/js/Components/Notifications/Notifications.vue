@@ -54,6 +54,9 @@ onMounted(() => {
             if (error.reason && error.reason["code"] == 40102) {
                 location.reload()
             }
+
+            console.log('Error', error);
+
         })
         .notification((notification) => {
             notifications.add(notification);

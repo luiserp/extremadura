@@ -9,17 +9,18 @@ services:
         user: developer
         uid: 1000
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
     image: app-extremadura
     container_name: app-extremadura
     restart: unless-stopped
     links:
       - mysql-extremadura
     environment:
-      VIRTUAL_HOST: extremadura.cultureplex.co
+      VIRTUAL_HOST: extremadura.luiserp.com
+      PHP_FPM_POOL_NAME: "app-extremadura"
     working_dir: /var/www/
     volumes:
-      - app-extremadura:/var/www
+      - ./:/var/www
       - ~/.ssh:/root/.ssh
     depends_on:
       - mysql-extremadura
@@ -46,8 +47,8 @@ services:
       MYSQL_HOST: '%' # Allow connections from any host
       MYSQL_ROOT_HOST: '%' # Allow connections from any host
     volumes:
-      - mysql-extremadura/var/lib/mysql:/var/lib/mysql
-      - mysql-extremadura/var/log/mysql:/var/log/mysql
+      - mysql-extremadura:/var/lib/mysql
+      - mysql-extremadura:/var/log/mysql
     networks:
       - laravel
 
@@ -62,10 +63,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - app-extremadura:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
-      - ./docker-compose/nginx/ssl:/etc/nginx/conf.d/ssl
-      - ./docker-compose/nginx/phpMyAdmin.conf:/etc/nginx/conf.d/phpMyAdmin.conf
+      - ./:/var/www
+      - ./docker/docker-compose/nginx:/etc/nginx/conf.d
+      - ./docker/docker-compose/nginx/ssl:/etc/nginx/conf.d/ssl
     networks:
       - laravel
 
@@ -82,14 +82,12 @@ services:
     restart: unless-stopped
     environment:
         PMA_HOST: mysql-extremadura
-        #PMA_USER: ${DB_USERNAME}
-        #PMA_PASSWORD: ${DB_PASSWORD}
         PMA_PORT: 3306
         PMA_ARBITRARY: 1
     networks:
         - laravel
 
- ####################################################################################################
+####################################################################################################
 # Redis
 ####################################################################################################
   redis-extremadura:
@@ -97,9 +95,85 @@ services:
     container_name: redis-extremadura
     restart: unless-stopped
     volumes:
-        - ./docker-compose/redis/data:/data
+        - redis-extremadura:/data
     ports:
       - "6379:6379"
+    networks:
+      - laravel
+
+####################################################################################################
+# Horizon
+####################################################################################################
+  horizon-extremadura:
+    build:
+      args:
+        user: developer
+        uid: 1000
+      context: ./
+      dockerfile: ./docker/Dockerfile.horizon
+    image: app-extremadura
+    container_name: horizon-extremadura
+    restart: unless-stopped
+    environment:
+      PHP_FPM_POOL_NAME: "horizon-extremadura"
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql-extremadura
+      - redis-extremadura
+    networks:
+      - laravel
+    command: ["php", "/var/www/artisan", "horizon"]
+
+####################################################################################################
+# Scheduler
+####################################################################################################
+  scheduler-extremadura:
+    build:
+      args:
+        user: developer
+        uid: 1000
+      context: ./
+      dockerfile: ./docker/Dockerfile.horizon
+    image: app-extremadura
+    container_name: scheduler-extremadura
+    restart: unless-stopped
+    environment:
+      PHP_FPM_POOL_NAME: "scheduler-extremadura"
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql-extremadura
+      - redis-extremadura
+    networks:
+      - laravel
+    command: ["php", "/var/www/artisan", "schedule:work"]
+
+####################################################################################################
+# Reverb
+####################################################################################################
+  reverb-extremadura:
+    build:
+      args:
+        user: developer
+        uid: 1000
+      context: ./
+      dockerfile: ./docker/Dockerfile.reverb
+    image: reverb-extremadura
+    container_name: reverb-extremadura
+    restart: unless-stopped
+    ports:
+      - 9001:9001
+    environment:
+      PHP_FPM_POOL_NAME: "reverb-extremadura"
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql-extremadura
+      - redis-extremadura
     networks:
       - laravel
 
@@ -110,4 +184,3 @@ networks:
 volumes:
   mysql-extremadura:
   redis-extremadura:
-  app-extremadura:
