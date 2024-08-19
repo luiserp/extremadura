@@ -7,7 +7,6 @@ import { watch } from "vue";
 const dialog = useDialogs();
 
 export const useBook = () => {
-
     const form = useForm<{
         title: string;
         category: App.Dtos.CategoryDto | null;
@@ -51,6 +50,21 @@ export const useBook = () => {
         router.delete(route("books.delete", id));
     };
 
+    const deleteAllBooks = async () => {
+        const res = await dialog.show({
+            title: trans("book.delete_all_books"),
+            subtitle: trans("book.delete_all_books_subtitle"),
+            message: trans("book.delete_all_books_message"),
+            size: "lg",
+        });
+
+        if (!res) {
+            return;
+        }
+
+        router.delete(route("books.delete-all"));
+    };
+
     const editBook = (id: number) => {
         router.get(route("books.edit", id));
     };
@@ -62,10 +76,8 @@ export const useBook = () => {
     };
 
     const calculateEmbedding = async (book: App.Dtos.BookDto | null) => {
-
         console.log("calculate embedding", book);
         console.log("calculate embedding", book?.id);
-
 
         const res = await dialog.show({
             title: trans("book.calculate_embeddings"),
@@ -88,7 +100,6 @@ export const useBook = () => {
     };
 
     const calculateSentiment = async (book: App.Dtos.BookDto | null) => {
-
         const res = await dialog.show({
             title: trans("book.calculate_sentiment"),
             subtitle: trans("book.calculate_sentiment_subtitle"),
@@ -128,14 +139,13 @@ export const useBook = () => {
         form.editorial = book.editorial;
         form.city = book.city;
         form.category = book.category;
-        form.reference = book.reference
-    }
+        form.reference = book.reference;
+    };
 
     // Test
     watch(form, (value) => {
         console.log("form", value);
     });
-
 
     return {
         form,
@@ -143,6 +153,7 @@ export const useBook = () => {
         checkBook,
         showBook,
         deleteBook,
+        deleteAllBooks,
         editBook,
         updateBook,
         calculateEmbedding,

@@ -6,7 +6,7 @@ import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowDownOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon } from '@heroicons/vue/24/outline';
+import { ArrowDownOnSquareIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
@@ -18,6 +18,7 @@ import { computed, ref, watch } from 'vue';
 import BookFilter from './Partials/BookFilter.vue';
 import { route } from 'ziggy-js'
 import { can } from "@/Utils/roles";
+import FileUpload from "primevue/fileupload";
 
 const props = defineProps({
     books: {
@@ -46,7 +47,7 @@ const currentPage = computed(() => {
     return props.books.per_page * (props.books.current_page - 1);
 });
 
-const { showBook, editBook, deleteBook, calculateEmbedding, calculateSentiment } = useBook();
+const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment } = useBook();
 
 const selected = ref<App.Dtos.BookDto | null>(null);
 watch(() => selected.value, (value) => {
@@ -57,6 +58,23 @@ watch(() => selected.value, (value) => {
 
 const setStatus = (book: App.Dtos.BookDto) => {
     router.get(route('books.set-active', { id: book.id }), {}, { preserveScroll: true });
+}
+
+// Import
+const inputImport = ref<HTMLInputElement | null>(null);
+function importButton() {
+    inputImport.value?.click();
+}
+
+function resetFileInput(event: any) {
+    event.target.value = "";
+}
+
+function importFile(event: any) {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    router.post(route('books.import'), formData);
 }
 
 </script>
@@ -70,12 +88,24 @@ const setStatus = (book: App.Dtos.BookDto) => {
 
                 </div>
                 <div class="flex gap-2">
+                    <!-- Import -->
+                    <form>
+                        <input id="file-customer" name="file-customer" type="file" class="sr-only"
+                            @click="resetFileInput($event)" @change="importFile($event)" ref="inputImport" />
+                        <Button type="button" severity="secondary" outlined @click="importButton">
+                            {{ $t('common.import') }}
+                            <ArrowDownOnSquareIcon class="h-6 w-6" />
+                        </Button>
+                    </form>
+
+                    <!-- Export -->
                     <a :href="route('books.export')">
                         <Button severity="secondary" outlined>
                             {{ $t('common.export') }}
                             <ArrowDownOnSquareIcon class="h-6 w-6" />
                         </Button>
                     </a>
+                    <!-- Actions -->
                     <Dropdown v-if="can('edit books')" width="66">
                         <template #trigger>
                             <Button
@@ -97,6 +127,14 @@ const setStatus = (book: App.Dtos.BookDto) => {
                             </DropdownLink>
                         </template>
                     </Dropdown>
+                    <!-- Delete -->
+                    <Button severity="danger"
+                        v-if="can('delete books')"
+                        @click="deleteAllBooks"
+                    >
+                        {{ $t('common.delete') }}
+                        <TrashIcon class="h-6 w-6" />
+                    </Button>
                 </div>
             </div>
         </template>
@@ -117,7 +155,7 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                 <p>{{ trans('book.authors') + ': ' }}</p>
                                 <div class="flex gap-2">
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
-                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '') }} </p>
+                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
                                 </div>
                             </div>
                             <div class="flex gap-2 mt-2">
@@ -176,30 +214,22 @@ const setStatus = (book: App.Dtos.BookDto) => {
                                             {{ $t("common.show") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink
-                                        v-if="can('edit books')"
-                                        @click="editBook(data.id)">
+                                    <DropdownLink v-if="can('edit books')" @click="editBook(data.id)">
                                         <div class="flex gap-2">
                                             {{ $t("common.edit") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink
-                                        v-if="can('delete books')"
-                                        @click="deleteBook(data.id)">
+                                    <DropdownLink v-if="can('delete books')" @click="deleteBook(data.id)">
                                         <div class="flex gap-2">
                                             {{ $t("common.delete") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink
-                                        v-if="can('edit books')"
-                                        @click="calculateEmbedding(data)">
+                                    <DropdownLink v-if="can('edit books')" @click="calculateEmbedding(data)">
                                         <div class="flex gap-2">
                                             {{ $t("book.calculate_embeddings") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink
-                                        v-if="can('edit books')"
-                                        @click="calculateSentiment(data)">
+                                    <DropdownLink v-if="can('edit books')" @click="calculateSentiment(data)">
                                         <div class="flex gap-2">
                                             {{ $t("book.calculate_sentiment") }}
                                         </div>

@@ -115,7 +115,7 @@ watch(
     () => props.notification,
     (notification) => {
         console.log(notification);
-        if (notification?.options?.link?.reload) {
+        if (notification?.options?.reload) {
             router.reload();
         }
     }

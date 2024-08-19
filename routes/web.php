@@ -11,6 +11,8 @@ use App\Http\Controllers\Book\BookCalculateSentimentController;
 use App\Http\Controllers\Book\BookExportController;
 use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
+use App\Http\Controllers\Book\ImportBookController;
+use App\Http\Controllers\Book\DeleteAllBooksController;
 use App\Http\Controllers\Devtools\DevtoolsController;
 use App\Http\Controllers\Devtools\TestBroadcastingController;
 use App\Http\Controllers\Navigation\NavigationController;
@@ -44,8 +46,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('books/update/{id}', BookUpdateController::class)->middleware('can:update,App\Models\Book')->name('books.update');
     Route::get('books/set-active/{id}', BookSetActiveController::class)->middleware('can:update,App\Models\Book')->name('books.set-active');
     Route::delete('books/delete/{id}', BookDeleteController::class)->middleware('can:delete,App\Models\Book')->name('books.delete');
+    Route::delete('books/delete-all', DeleteAllBooksController::class)->middleware('can:delete,App\Models\Book')->name('books.delete-all');
 
     Route::get('books/check-data', BookAskAssistantController::class)->middleware('can:update,App\Models\Book')->name('books.check-data');
+
+    Route::post('books/import', ImportBookController::class)->name('books.import');
 
     // Book Nlp
     Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-embedding');

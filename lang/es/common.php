@@ -2,7 +2,8 @@
 
 return [
     'select' => 'Seleccione',
-    'export' => 'Export',
+    'export' => 'Exportar',
+    'import' => 'Importar',
     'saved' => 'Guardado.',
     'save' => 'Guardar',
     'home' => 'Inicio',

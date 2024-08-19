@@ -44,8 +44,8 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-      MYSQL_HOST: '%' # Allow connections from any host
-      MYSQL_ROOT_HOST: '%' # Allow connections from any host
+    #   MYSQL_HOST: '%' # Allow connections from any host
+    #   MYSQL_ROOT_HOST: '%' # Allow connections from any host
     volumes:
       - mysql-extremadura:/var/lib/mysql
       - mysql-extremadura:/var/log/mysql

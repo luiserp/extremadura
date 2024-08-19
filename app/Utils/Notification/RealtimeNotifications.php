@@ -3,6 +3,7 @@
 namespace App\Utils\Notification;
 
 use App\Notifications\RealtimeNotification;
+use Illuminate\Support\Facades\Log;
 
 class RealtimeNotifications extends AbstractNotifications
 {
@@ -24,7 +25,13 @@ class RealtimeNotifications extends AbstractNotifications
             throw new \Exception('No notifiable found in RealtimeNotifications');
         }
 
-        $this->notifiable->notify(new RealtimeNotification($arguments[0], $type, $arguments[1] ?? 5000, $arguments[2] ?? null));
+        Log::info('RealtimeNotifications', ['type' => $type, 'arguments' => $arguments]);
+
+        $message = $arguments[0] ?? $arguments['message'] ?? null;
+        $duration = $arguments[1] ?? $arguments['duration'] ?? 5000;
+        $options = $arguments[2] ?? $arguments['options'] ?? null;
+
+        $this->notifiable->notify(new RealtimeNotification($message, $type, $duration, $options));
     }
 
     public function to($notifiable = null)

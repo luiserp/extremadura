@@ -41,4 +41,13 @@ return [
     // Titles
     'has_embeddings' => 'Tiene datos de embeddings',
     'has_sentiment' => 'Tiene datos de analisis de sentimientos',
+
+    'import_books_in_progress' => 'El archivo se está importando. Recibirás una notificación cuando el proceso haya finalizado.',
+    'import_books_success' => 'Los libros se han importado correctamente.',
+
+    'delete_all_books' => 'Eliminar todos los libros',
+    'delete_all_books_subtitle' => '¿Estás seguro de que quieres eliminar todos los libros?',
+    'delete_all_books_message' => 'Una vez eliminados, no podrás recuperar los libros.',
+    'delete_all_books_in_progress' => 'Se están eliminando todos los libros. Recibirás una notificación cuando el proceso haya finalizado.',
+    'delete_all_books_success' => 'Todos los libros han sido eliminados correctamente.',
 ];

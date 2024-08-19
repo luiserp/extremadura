@@ -41,4 +41,13 @@ return [
     // Titles
     'has_embeddings' => 'Has embeddings data',
     'has_sentiment' => 'Has sentiment analysis data',
+
+    'import_books_in_progress' => 'The file is being imported. You will receive a notification when the process is complete.',
+    'import_books_success' => 'Books have been imported successfully.',
+
+    'delete_all_books' => 'Delete all books',
+    'delete_all_books_subtitle' => 'Are you sure you want to delete all books?',
+    'delete_all_books_message' => 'Once deleted, you will not be able to recover the books.',
+    'delete_all_books_in_progress' => 'All books are being deleted. You will receive a notification when the process is complete.',
+    'delete_all_books_success' => 'All books have been deleted successfully.',
 ];
