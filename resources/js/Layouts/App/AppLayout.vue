@@ -17,7 +17,7 @@ defineProps({
     title: String,
     homePath: {
         type: String,
-        default: "books.index",
+        default: "welcome",
     },
 });
 
