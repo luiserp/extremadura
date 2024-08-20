@@ -44,4 +44,7 @@ return [
     'metadata' => 'Metadata',
     'status' => 'Status',
     'check' => 'Check',
+    'more_info' => 'More Info',
+    'see_more' => 'See More',
+    'reload' => 'Reload',
 ];

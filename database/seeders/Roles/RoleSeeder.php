@@ -13,18 +13,18 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminRole = Role::findOrCreate('admin');
 
-        $adminRole = Role::create(['name' => 'admin']);
-
-        $addBook = Permission::create(['name' => 'add books']);
-        $editBook = Permission::create(['name' => 'edit books']);
-        $deleteBook = Permission::create(['name' => 'delete books']);
+        $addBook = Permission::findOrCreate('add books');
+        $editBook = Permission::findOrCreate('edit books');
+        $deleteBook = Permission::findOrCreate('delete books');
+        $downloadBook = Permission::findOrCreate('download books');
 
         $adminRole->givePermissionTo($addBook);
         $adminRole->givePermissionTo($editBook);
         $adminRole->givePermissionTo($deleteBook);
+        $adminRole->givePermissionTo($downloadBook);
 
-        $userRole = Role::create(['name' => 'user']);
-
+        $userRole = Role::findOrCreate('user');
     }
 }

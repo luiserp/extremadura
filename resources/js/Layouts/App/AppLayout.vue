@@ -56,20 +56,20 @@ const canRegister = computed(() => {
                 borderColor: 'var(--p-border-color)',
             }">
                 <!-- Primary Navigation Menu -->
-                <div class="px-16">
+                <div class="px-8 shadow-sm">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex items-center shrink-0">
                                 <NavLink :href="route(homePath)">
-                                    <HomeIcon class="h-6 w-6" style="color: var(--p-text-color)" />
+                                    <HomeIcon class="h-6 w-6" />
                                 </NavLink>
                             </div>
                         </div>
 
                         <div class="hidden space-x-0 sm:flex sm:items-center sm:ms-6">
                             <!-- Navigation Links sm:flex -->
-                            <div class="hidden mx-2 space-x-4 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden mx-2 space-x-2 sm:-my-px sm:ms-10 sm:flex">
 
                                 <!-- <button @click="toggleColorScheme">
                                     <component :is="colorScheme === 'light' ? MoonIcon : SunIcon" class="h-6 w-6"
@@ -80,8 +80,8 @@ const canRegister = computed(() => {
                                 <Dropdown>
                                     <template #trigger>
                                         <button
-                                            class="flex text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
-                                            <LanguageIcon class="h-6 w-6 " style="color: var(--p-text-color)" />
+                                            class="flex text-sm transition border-2 border-transparent rounded-full">
+                                            <LanguageIcon class="h-6 w-6 " />
                                         </button>
                                     </template>
 
@@ -120,19 +120,20 @@ const canRegister = computed(() => {
                                     </template>
                                 </Dropdown>
                             </div>
-                            <div v-else-if="canLogin" class="sm:top-0 sm:right-0 p-6 text-end">
-                                <Link v-if="$page.props.auth.user" :href="route('books.index')"
-                                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                {{ trans('nav.home') }}</Link>
+                            <div v-else-if="canLogin" class="sm:top-0 sm:right-0 p-6 text-end flex gap-4">
+                                <NavLink v-if="$page.props.auth.user" :href="route('books.index')"
+                                    class="font-semibold">
+                                    {{ trans('nav.home') }}
+                                </NavLink>
 
                                 <template v-else>
-                                    <Link :href="route('login')"
-                                        class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                    {{ trans('nav.login') }}</Link>
+                                    <NavLink :href="route('login')">
+                                        {{ trans('nav.login') }}
+                                    </NavLink>
 
-                                    <Link v-if="canRegister" :href="route('register')"
-                                        class="ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                    {{ trans('nav.register') }}</Link>
+                                    <NavLink v-if="canRegister" :href="route('register')">
+                                        {{ trans('nav.register') }}
+                                    </NavLink>
                                 </template>
                             </div>
                         </div>
@@ -172,6 +173,12 @@ const canRegister = computed(() => {
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route(homePath)" :active="route().current(homePath)">
                             {{ trans('nav.home') }}
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('login')" :active="route().current(homePath)">
+                            {{ trans('nav.login') }}
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('register')" :active="route().current(homePath)">
+                            {{ trans('nav.register') }}
                         </ResponsiveNavLink>
                     </div>
 

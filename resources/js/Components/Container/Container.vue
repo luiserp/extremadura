@@ -1,5 +1,5 @@
 <template>
-    <div class="container block mx-auto max-w-screen-2xl rounded-xl py-4 border mt-4">
+    <div class="container block mx-auto max-w-screen-2xl py-4 border mt-4 bg-white p-6 rounded-lg shadow-sm">
         <div class="mx-auto px-2 sm:px-6 lg:px-8">
             <slot />
         </div>

@@ -6,7 +6,7 @@ import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowDownOnSquareIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { ArrowDownOnSquareIcon, ArrowPathIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
@@ -18,7 +18,7 @@ import { computed, ref, watch } from 'vue';
 import BookFilter from './Partials/BookFilter.vue';
 import { route } from 'ziggy-js'
 import { can } from "@/Utils/roles";
-import FileUpload from "primevue/fileupload";
+import ReloadButton from "@/Components/Buttons/ReloadButton.vue";
 
 const props = defineProps({
     books: {
@@ -78,6 +78,7 @@ function importFile(event: any) {
     router.post(route('books.import'), formData);
 }
 
+
 </script>
 
 <template>
@@ -89,18 +90,20 @@ function importFile(event: any) {
 
                 </div>
                 <div class="flex gap-2">
+                    <!-- Reload -->
+                    <ReloadButton />
                     <!-- Import -->
                     <form v-if="can('add books')">
                         <input id="file-customer" name="file-customer" type="file" class="sr-only"
                             @click="resetFileInput($event)" @change="importFile($event)" ref="inputImport" multiple />
-                        <Button type="button" severity="secondary" outlined @click="importButton">
+                        <Button id="import-button" type="button" severity="secondary" outlined @click="importButton">
                             {{ $t('common.import') }}
                             <ArrowDownOnSquareIcon class="h-6 w-6" />
                         </Button>
                     </form>
 
                     <!-- Export -->
-                    <a :href="route('books.export')">
+                    <a v-if="can('download books')" :href="route('books.export')">
                         <Button severity="secondary" outlined>
                             {{ $t('common.export') }}
                             <ArrowDownOnSquareIcon class="h-6 w-6" />
@@ -129,10 +132,7 @@ function importFile(event: any) {
                         </template>
                     </Dropdown>
                     <!-- Delete -->
-                    <Button severity="danger"
-                        v-if="can('delete books')"
-                        @click="deleteAllBooks"
-                    >
+                    <Button severity="danger" v-if="can('delete books')" @click="deleteAllBooks">
                         {{ $t('common.delete') }}
                         <TrashIcon class="h-6 w-6" />
                     </Button>
@@ -149,14 +149,14 @@ function importFile(event: any) {
                 :rowClass="() => 'cursor-pointer select-none'">
                 <Column :header="trans('book.title')">
                     <template #body="{ data }">
-                        <div :title="data.title" class="truncate max-h-18 max-w-80">
+                        <div :title="data.title" class="truncate max-h-18 max-w-64">
                             {{ data.title }}
 
                             <div class="flex gap-2 items-baseline">
                                 <p>{{ trans('book.authors') + ': ' }}</p>
                                 <div class="flex gap-2">
                                     <p v-for="author, index in data.authors" class="font-light text-sm">
-                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '' ) }} </p>
+                                        {{ author.name + (index < data.authors.length - 1 ? ',' : '') }} </p>
                                 </div>
                             </div>
                             <div class="flex gap-2 mt-2">
