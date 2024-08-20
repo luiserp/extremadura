@@ -50,4 +50,5 @@ return [
     'delete_all_books_message' => 'Once deleted, you will not be able to recover the books.',
     'delete_all_books_in_progress' => 'All books are being deleted. You will receive a notification when the process is complete.',
     'delete_all_books_success' => 'All books have been deleted successfully.',
+    'delete_all_books_error' => 'An error occurred while deleting all books.',
 ];

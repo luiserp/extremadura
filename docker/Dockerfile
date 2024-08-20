@@ -35,6 +35,8 @@ WORKDIR /var/www
 
 COPY . .
 
+ADD ./docker/docker-compose/php/custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
+
 USER $user
 
 RUN composer install

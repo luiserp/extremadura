@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BookImportJob implements ShouldQueue
@@ -32,14 +33,18 @@ class BookImportJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // Import the file
+        try {
+            // Import the file
+            $filePath = $this->filePath;
 
-        $filePath = $this->filePath;
+            $file = storage_path('app/' . $filePath);
 
-        $file = storage_path('app/' . $filePath);
+            Excel::import(new BookImport, $file);
 
-        Excel::import(new BookImport, $file);
-
-        $this->notifyUser(trans('book.import_books_success'), true);
+            $this->notifyUser(trans('book.import_books_success'), true);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            $this->notifyUserError(trans('book.delete_all_books_error'), true);
+        }
     }
 }

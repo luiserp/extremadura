@@ -14,16 +14,18 @@ class ImportBookController extends Controller
      */
     public function __invoke(Request $request)
     {
-
         $user = $request->user();
-        $file = $request->file('file');
-        $name = $file->getBasename() . '-' . time() . '.' . $file->getClientOriginalExtension();
-        $path = "books/{$user->id}/";
+        $files = $request->file('files');
 
-        // save the file
-        $file->storeAs($path, $name);
+        foreach ($files as $file) {
+            $name = $file->getBasename() . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = "books/{$user->id}/";
 
-        BookImportJob::dispatch($request->user(), $path . $name);
+            // save the file
+            $file->storeAs($path, $name);
+
+            BookImportJob::dispatch($request->user(), $path . $name);
+        }
 
         Notify::success(trans('book.import_books_in_progress'));
     }

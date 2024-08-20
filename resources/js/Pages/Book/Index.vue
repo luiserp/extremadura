@@ -71,9 +71,10 @@ function resetFileInput(event: any) {
 }
 
 function importFile(event: any) {
-    const file = event.target.files[0];
     const formData = new FormData();
-    formData.append("file", file);
+    for (let i = 0; i < event.target.files.length; i++) {
+        formData.append("files[]", event.target.files[i]);
+    }
     router.post(route('books.import'), formData);
 }
 
@@ -91,7 +92,7 @@ function importFile(event: any) {
                     <!-- Import -->
                     <form>
                         <input id="file-customer" name="file-customer" type="file" class="sr-only"
-                            @click="resetFileInput($event)" @change="importFile($event)" ref="inputImport" />
+                            @click="resetFileInput($event)" @change="importFile($event)" ref="inputImport" multiple />
                         <Button type="button" severity="secondary" outlined @click="importButton">
                             {{ $t('common.import') }}
                             <ArrowDownOnSquareIcon class="h-6 w-6" />

@@ -32,13 +32,13 @@ class BookImport implements ToCollection, WithHeadingRow
 
             foreach ($authorsRows as $author) {
                 $authors[] = Author::firstOrCreate([
-                    'name' => $author,
+                    'name' => $this->encodeUtf8($author),
                 ]);
             }
 
             if (array_key_exists('category', $row->toArray())) {
                 $category = Category::firstOrCreate([
-                    'name' => Str::upper(strtolower($row['category'])),
+                    'name' => Str::upper(strtolower($this->encodeUtf8($row['category']))),
                 ]);
             } else {
                 $category = Category::firstOrCreate([
@@ -50,23 +50,30 @@ class BookImport implements ToCollection, WithHeadingRow
                 $row['city'] = 'Desconocida';
             }
 
+            $year = is_numeric($row['year']) ? $row['year'] : null;
+
             $book = Book::firstOrCreate(
                 [
-                    'title' => $row['title'],
-                    'year' => $row['year'],
+                    'title' => $this->encodeUtf8($row['title']),
+                    'year' => $year,
                 ],
                 [
                     'description' => array_key_exists('description', $row->toArray()) ? $row['description'] : null,
-                    'catalog' => $row['catalog'],
+                    'catalog' => $this->encodeUtf8($row['catalog']),
                     'category_id' => $category->id,
-                    'editorial' => $row['editorial'],
-                    'city' => $row['city'],
-                    'reference' => $row['reference'],
+                    'editorial' => $this->encodeUtf8($row['editorial']),
+                    'city' => $this->encodeUtf8($row['city']),
+                    'reference' => $this->encodeUtf8($row['reference']),
                 ]
             );
 
             $book->authors()->sync(collect($authors)->pluck('id'));
 
         }
+    }
+
+    public function encodeUtf8($value)
+    {
+        return mb_convert_encoding($value, 'UTF-8', 'auto');
     }
 }
