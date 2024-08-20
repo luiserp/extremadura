@@ -90,7 +90,7 @@ function importFile(event: any) {
                 </div>
                 <div class="flex gap-2">
                     <!-- Import -->
-                    <form>
+                    <form v-if="can('add books')">
                         <input id="file-customer" name="file-customer" type="file" class="sr-only"
                             @click="resetFileInput($event)" @change="importFile($event)" ref="inputImport" multiple />
                         <Button type="button" severity="secondary" outlined @click="importButton">
