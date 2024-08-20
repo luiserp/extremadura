@@ -47,7 +47,7 @@ const currentPage = computed(() => {
     return props.books.per_page * (props.books.current_page - 1);
 });
 
-const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment } = useBook();
+const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment, calculateStats } = useBook();
 
 const selected = ref<App.Dtos.BookDto | null>(null);
 watch(() => selected.value, (value) => {
@@ -89,7 +89,7 @@ function importFile(event: any) {
                 <div>
 
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 flex-wrap">
                     <!-- Reload -->
                     <ReloadButton />
                     <!-- Import -->
@@ -127,6 +127,11 @@ function importFile(event: any) {
                             <DropdownLink @click="calculateSentiment">
                                 <div class="flex gap-2">
                                     {{ $t("book.calculate_sentiment") }}
+                                </div>
+                            </DropdownLink>
+                            <DropdownLink @click="calculateStats">
+                                <div class="flex gap-2">
+                                    {{ $t("book.calculate_stats") }}
                                 </div>
                             </DropdownLink>
                         </template>

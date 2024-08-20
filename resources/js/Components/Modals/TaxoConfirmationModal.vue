@@ -79,6 +79,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, } fr
 import { computed } from "@vue/reactivity";
 import { ref, watch } from "vue";
 import Button from 'primevue/button';
+import { trans } from "laravel-vue-i18n";
 
 const props = defineProps({
     show: Boolean,
@@ -88,23 +89,23 @@ const props = defineProps({
     },
     title: {
         type: String,
-        default: "Confimación",
+        default: () => trans("common.confirmation_title"),
     },
     subtitle: {
         type: String,
-        default: "Subtitulo de confimación",
+        default: () => trans("common.confirmation_subtitle"),
     },
     message: {
         type: String,
-        default: "Confimación",
+        default: () => trans("common.confirmation_message"),
     },
     okButton: {
         type: String,
-        default: "Aceptar",
+        default: () => trans("common.accept"),
     },
     cancelButton: {
         type: String,
-        default: "Cancelar",
+        default: () => trans("common.cancel"),
     },
     buttons: {
         type: Array,

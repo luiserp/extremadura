@@ -47,4 +47,7 @@ return [
     'more_info' => 'More Info',
     'see_more' => 'See More',
     'reload' => 'Reload',
+    'confirmation_message' => 'Confirmation Message',
+    'confirmation_subtitle' => 'Confirmation Subtitle',
+    'confirmation_title' => 'Confirmation Title',
 ];

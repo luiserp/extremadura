@@ -51,4 +51,21 @@ return [
     'delete_all_books_in_progress' => 'All books are being deleted. You will receive a notification when the process is complete.',
     'delete_all_books_success' => 'All books have been deleted successfully.',
     'delete_all_books_error' => 'An error occurred while deleting all books.',
+
+    // Calculate stats
+    'calculate_stats' => 'Calculate statistics',
+    'calculate_stats_subtitle' => 'Are you sure you want to calculate the statistics?',
+    'calculate_stats_message' => 'This action will take some time, once calculated, we will send you a notification.',
+
+    'calculate_stats_in_progress' => 'Statistics are being calculated. You will receive a notification when the process is complete.',
+    'calculate_stats_success' => 'Statistics have been calculated successfully.',
+    'calculate_stats_error' => 'An error occurred while calculating the statistics.',
+
+    'stats' => 'Statistics',
+    'books_per_city' => 'Books per city',
+    'books_per_editorial' => 'Books per editorial',
+    'books_per_category' => 'Books per category',
+    'books_per_year' => 'Books per year',
+    'books_per_author' => 'Books per author',
+    'books_per_city_per_category' => 'Books per city and category',
 ];

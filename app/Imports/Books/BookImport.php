@@ -38,7 +38,7 @@ class BookImport implements ToCollection, WithHeadingRow
 
             if (array_key_exists('category', $row->toArray())) {
                 $category = Category::firstOrCreate([
-                    'name' => Str::upper(strtolower($this->encodeUtf8($row['category']))),
+                    'name' => Str::trim(Str::upper(strtolower($this->encodeUtf8($row['category'])))),
                 ]);
             } else {
                 $category = Category::firstOrCreate([

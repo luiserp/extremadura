@@ -8,6 +8,7 @@ use App\Http\Controllers\Book\Api\BookGetActiveBook;
 use App\Http\Controllers\Book\BookAskAssistantController;
 use App\Http\Controllers\Book\BookCalculateEmbeddingController;
 use App\Http\Controllers\Book\BookCalculateSentimentController;
+use App\Http\Controllers\Book\BookCalculateStatsController;
 use App\Http\Controllers\Book\BookExportController;
 use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
@@ -55,10 +56,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Book Nlp
     Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-embedding');
     Route::get('books/calculate-sentiment', BookCalculateSentimentController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-sentiment');
+
+    Route::get('books/calculate-stats', BookCalculateStatsController::class)->middleware('role:admin')->name('books.calculate-stats');
 });
 
 Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');
-
 
 // Devtools
 Route::get('/devtools/broadcasting-test', TestBroadcastingController::class)->name('devtools.broadcasting-test');

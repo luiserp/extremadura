@@ -6,6 +6,7 @@ use App\Facades\Notify;
 use App\Http\Controllers\Controller;
 use App\Jobs\BookImportJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 
 class ImportBookController extends Controller
 {
@@ -16,6 +17,7 @@ class ImportBookController extends Controller
     {
         $user = $request->user();
         $files = $request->file('files');
+        $batch = [];
 
         foreach ($files as $file) {
             $name = $file->getBasename() . '-' . time() . '.' . $file->getClientOriginalExtension();
@@ -24,8 +26,10 @@ class ImportBookController extends Controller
             // save the file
             $file->storeAs($path, $name);
 
-            BookImportJob::dispatch($request->user(), $path . $name);
+            $batch[] = new BookImportJob($request->user(), $path . $name);
         }
+
+        Bus::chain($batch)->dispatch();
 
         Notify::success(trans('book.import_books_in_progress'));
     }

@@ -120,6 +120,21 @@ export const useBook = () => {
         );
     };
 
+    const calculateStats = async (book: App.Dtos.BookDto | null) => {
+        const res = await dialog.show({
+            title: trans("book.calculate_stats"),
+            subtitle: trans("book.calculate_stats_subtitle"),
+            message: trans("book.calculate_stats_message"),
+            size: "lg",
+        });
+
+        if (!res) {
+            return;
+        }
+
+        router.get(route("books.calculate-stats"), {},{ preserveScroll: true });
+    };
+
     const checkBook = async (book: App.Dtos.BookDto | null) => {
         router.get(
             route("books.check-data"),
@@ -158,5 +173,6 @@ export const useBook = () => {
         updateBook,
         calculateEmbedding,
         calculateSentiment,
+        calculateStats,
     };
 };

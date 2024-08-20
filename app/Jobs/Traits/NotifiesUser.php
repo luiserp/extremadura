@@ -21,7 +21,7 @@ trait NotifiesUser
     protected function notifyUserError(string $message, bool $reload = false): void
     {
         // Notify the user
-        Notify::realtime()->to($this->user)->error(
+        Notify::realtime()->to($this->user)->danger(
             $message,
             options: [
                 'reload' => $reload

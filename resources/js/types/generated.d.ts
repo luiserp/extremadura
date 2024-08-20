@@ -48,6 +48,11 @@ neutral_sentiment: string;
 created_at: string;
 updated_at: string;
 };
+export type BookStatsDto = {
+name: string;
+labels: Array<any>;
+data: Array<any>;
+};
 export type CategoryDto = {
 id: number;
 name: string;

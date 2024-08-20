@@ -9,7 +9,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { useColorScheme } from "@/Composables/ColorScheme/colorScheme";
 import { useLocale } from "@/Composables/Locale/locale";
 import { HomeIcon, LanguageIcon } from "@heroicons/vue/24/outline";
-import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
 import { trans } from 'laravel-vue-i18n';
 import { computed, ref } from "vue";
 
@@ -58,15 +58,17 @@ const canRegister = computed(() => {
                 <!-- Primary Navigation Menu -->
                 <div class="px-8 shadow-sm">
                     <div class="flex justify-between h-16">
-                        <div class="flex">
+                        <div class="flex items-center align-bottom gap-6">
                             <!-- Logo -->
-                            <div class="flex items-center shrink-0">
-                                <NavLink :href="route(homePath)">
-                                    <HomeIcon class="h-6 w-6" />
+                            <NavLink :href="route(homePath)">
+                                <HomeIcon class="h-6 w-6" />
+                            </NavLink>
+                            <div class="flex mt-2">
+                                <NavLink :href="route('books.index')">
+                                    {{ trans('book.books') }}
                                 </NavLink>
                             </div>
                         </div>
-
                         <div class="hidden space-x-0 sm:flex sm:items-center sm:ms-6">
                             <!-- Navigation Links sm:flex -->
                             <div class="hidden mx-2 space-x-2 sm:-my-px sm:ms-10 sm:flex">
