@@ -171,6 +171,7 @@ return [
         App\Providers\HorizonServiceProvider::class,
         App\Providers\NotificationProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
     ])->toArray(),
 
     /*
