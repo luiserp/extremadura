@@ -20,15 +20,15 @@ class BookExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'Title',
-            'Authors',
-            'Description',
-            'Editorial',
-            'Category',
-            'Year',
-            'City',
-            'Catalog',
-            'Reference',
+            'title',
+            'author',
+            'description',
+            'editorial',
+            'category',
+            'year',
+            'city',
+            'catalog',
+            'reference',
         ];
     }
 
