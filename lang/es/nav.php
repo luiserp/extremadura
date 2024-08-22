@@ -9,4 +9,5 @@ return [
     'language' => 'Idioma',
     'login' => 'Iniciar Sesión',
     'register' => 'Registrarse',
+    'about' => 'Acerca de',
 ];

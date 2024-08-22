@@ -37,7 +37,7 @@ defineProps({
     <AppLayout :title="trans('book.books')">
         <!-- Intro Section -->
         <Container>
-            <section class="text-center my-12">
+            <section class="text-center">
                 <h2 class="text-3xl font-semibold mb-4">{{ trans('welcome.welcome_title') }}</h2>
                 <p class="text-lg mb-8">{{ trans('welcome.welcome_description') }}</p>
                 <Link :href="route('books.index')">
