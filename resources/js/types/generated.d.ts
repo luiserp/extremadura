@@ -5,6 +5,14 @@ name: string;
 created_at: string;
 updated_at: string;
 };
+export type BookDescriptionDto = {
+id: number;
+book_id: string;
+description: string;
+model: string;
+created_at: string;
+updated_at: string;
+};
 export type BookDto = {
 id: number;
 title: string;
@@ -16,12 +24,14 @@ city: string | null;
 reference: string | null;
 has_embeddings: boolean | null;
 has_sentiment: boolean | null;
+has_description: boolean | null;
 active: boolean | null;
 ready: boolean | null;
 category: App.Dtos.CategoryDto | null;
 authors: Array<App.Dtos.AuthorDto>;
 embedding: App.Dtos.BookEmbeddingDto | null;
 sentiment: App.Dtos.BookSentimentDto | null;
+bookDescription: App.Dtos.BookDescriptionDto | null;
 };
 export type BookEmbeddingDto = {
 id: number;

@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
-class Book extends Model
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+class Book extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
 
     protected $guarded = [];
@@ -43,6 +48,19 @@ class Book extends Model
     public function sentiment(): HasOne
     {
         return $this->hasOne(BookSentiment::class);
+    }
+
+    public function description(): HasOne
+    {
+        return $this->hasOne(BookDescription::class);
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
     }
 
 }

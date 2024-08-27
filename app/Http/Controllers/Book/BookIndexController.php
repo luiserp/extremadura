@@ -8,6 +8,7 @@ use App\Dtos\CategoryDto;
 use App\Dtos\EditorialDto;
 use App\Http\Controllers\Controller;
 use App\Models\Books\Book;
+use App\Models\Books\BookDescription;
 use App\Models\Books\BookEmbedding;
 use App\Models\Books\BookSentiment;
 use App\Models\Books\Category;
@@ -45,6 +46,8 @@ class BookIndexController extends Controller
                 'has_embeddings' => BookEmbedding::selectRaw('count(*)')
                     ->whereColumn('book_id', 'books.id'),
                 'has_sentiment' => BookSentiment::selectRaw('count(*)')
+                    ->whereColumn('book_id', 'books.id'),
+                'has_description' => BookDescription::class::selectRaw('count(*)')
                     ->whereColumn('book_id', 'books.id'),
             ])
             // Dates

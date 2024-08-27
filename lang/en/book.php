@@ -41,6 +41,8 @@ return [
     // Titles
     'has_embeddings' => 'Has embeddings data',
     'has_sentiment' => 'Has sentiment analysis data',
+    'has_description' => 'Has description data',
+    'has_images' => 'Has images',
 
     'import_books_in_progress' => 'The file is being imported. You will receive a notification when the process is complete.',
     'import_books_success' => 'Books have been imported successfully.',
@@ -68,4 +70,20 @@ return [
     'books_per_year' => 'Books per year',
     'books_per_author' => 'Books per author',
     'books_per_city_per_category' => 'Books per city and category',
+
+    // Prompt
+    'book_create_prompt' => 'Generate description',
+    'book_create_prompt_subtitle' => 'Are you sure you want to generate the book description?',
+    'book_create_prompt_message' => 'This action will take some time, once generated, we will send you a notification.',
+    'book_create_prompt_in_progress' => 'The book description is being generated. You will receive a notification when the process is complete.',
+    'book_create_prompt_success' => 'The book description has been generated successfully.',
+    'book_create_prompt_error' => 'An error occurred while generating the book description.',
+
+    // Generate image
+    'book_generate_image' => 'Generate image',
+    'book_generate_image_subtitle' => 'Are you sure you want to generate the book image?',
+    'book_generate_image_message' => 'This action will take some time, once generated, we will send you a notification.',
+    'book_generate_image_in_progress' => 'The book image is being generated. You will receive a notification when the process is complete.',
+    'book_generate_image_success' => 'The book image has been generated successfully.',
+    'book_generate_image_error' => 'An error occurred while generating the book image.',
 ];

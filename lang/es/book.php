@@ -41,6 +41,8 @@ return [
     // Titles
     'has_embeddings' => 'Tiene datos de embeddings',
     'has_sentiment' => 'Tiene datos de analisis de sentimientos',
+    'has_description' => 'Tiene datos de descripción',
+    'has_images' => 'Tiene imágenes',
 
     'import_books_in_progress' => 'El archivo se está importando. Recibirás una notificación cuando el proceso haya finalizado.',
     'import_books_success' => 'Los libros se han importado correctamente.',
@@ -69,4 +71,20 @@ return [
     'books_per_year' => 'Libros por año',
     'books_per_author' => 'Libros por autor',
     'books_per_city_per_category' => 'Libros por ciudad y categoría',
+
+    // Prompt
+    'book_create_prompt' => 'Generar descripción',
+    'book_create_prompt_subtitle' => '¿Estás seguro de que quieres generar la descripción del libro?',
+    'book_create_prompt_message' => 'Esta acción tomará un tiempo, una vez generada, te enviaremos una notificación.',
+    'book_create_prompt_in_progress' => 'Descripción del libro generándose automáticamente...',
+    'book_create_prompt_success' => 'Descripción del libro generada correctamente.',
+    'book_create_prompt_error' => 'Se ha producido un error al generar la descripción del libro.',
+
+    // Generate image
+    'book_generate_image' => 'Generar imagen',
+    'book_generate_image_subtitle' => '¿Estás seguro de que quieres generar la imagen del libro?',
+    'book_generate_image_message' => 'Esta acción tomará un tiempo, una vez generada, te enviaremos una notificación.',
+    'book_generate_image_in_progress' => 'Imagen del libro generándose automáticamente...',
+    'book_generate_image_success' => 'Imagen del libro generada correctamente.',
+    'book_generate_image_error' => 'Se ha producido un error al generar la imagen del libro.',
 ];

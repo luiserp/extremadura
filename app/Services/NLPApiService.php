@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Dtos\BookDto;
 use App\Exceptions\Book\ErrorParsingDataCheckResponseExeption;
+use App\Models\Books\BookDescription;
 use App\Models\Books\BookEmbedding;
 use App\Models\Books\BookSentiment;
-use Illuminate\Http\Client\Pool;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class NLPApiService
 {
@@ -114,6 +116,69 @@ class NLPApiService
                 'negative_sentiment' => $negative,
                 'neutral_sentiment' => $neutral,
             ]);
+        }
+
+    }
+
+    public function generateDescription($books)
+    {
+
+        for ($i = 0; $i < count($books); $i++) {
+
+            $book = $books[$i];
+            $text = $book->description;
+
+            $response = Http::connectTimeout(360)->retry(3, 360_000)->post(config('services.nlp.url'). '/description', [
+                'text' => $text
+            ]);
+
+            try {
+                $nlp = $response->json();
+
+                BookDescription::create([
+                    'book_id' => $book->id,
+                    'model' => $nlp['model'],
+                    'description' => $nlp['description'],
+                ]);
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                Log::error($e->getTraceAsString());
+            }
+        }
+
+    }
+
+    public function generateImage($books)
+    {
+
+        for ($i = 0; $i < count($books); $i++) {
+
+            $book = $books[$i];
+            $title = $book->title;
+            $text = $book->description()->first()->description ?? $book->description;
+
+            $response = Http::connectTimeout(360)->retry(3, 360_000)->post(config('services.nlp.url'). '/comfyui/get-image', [
+                'text' => $text,
+                "seed" => 0
+            ]);
+
+            try {
+
+                $image = $response->body();
+                $name = Str::slug($title) . '.jpg';
+
+                Storage::disk('public')->put("images/{$name}", $image);
+                $pathToFile = storage_path("app/public/images/{$name}");
+
+                // Save image
+                $book->addMedia($pathToFile)
+                    ->usingFileName($name)
+                    ->toMediaCollection('books');
+
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                Log::error($e->getTraceAsString());
+            }
         }
 
     }

@@ -19,6 +19,7 @@ class BookDto extends Data
     public ?string $reference;
     public ?bool $has_embeddings;
     public ?bool $has_sentiment;
+    public ?bool $has_description;
     public ?bool $active;
     public ?bool $ready;
     public ?CategoryDto $category;
@@ -26,4 +27,5 @@ class BookDto extends Data
     public array $authors = [];
     public ?BookEmbeddingDto $embedding;
     public ?BookSentimentDto $sentiment;
+    public ?BookDescriptionDto $bookDescription;
 }

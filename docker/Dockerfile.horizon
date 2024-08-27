@@ -8,12 +8,20 @@ RUN apk update && apk add \
     libpng-dev \
     libxml2-dev \
     php-gd \
+    git \
     zip \
     unzip \
-    shadow  # Add shadow package to install useradd
+    shadow \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libxml2-dev
 
-RUN docker-php-ext-install pdo pdo_mysql pcntl gd \
+RUN docker-php-ext-install pdo pdo_mysql pcntl exif \
     && apk --no-cache add nodejs npm
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd
 
 RUN apk add \
         libzip-dev \

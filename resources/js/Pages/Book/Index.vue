@@ -6,7 +6,7 @@ import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowDownOnSquareIcon, ArrowPathIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { ArrowDownOnSquareIcon, ArrowPathIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, DocumentTextIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
@@ -47,7 +47,7 @@ const currentPage = computed(() => {
     return props.books.per_page * (props.books.current_page - 1);
 });
 
-const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment, calculateStats } = useBook();
+const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment, calculateStats, createDescription, generateImage } = useBook();
 
 const selected = ref<App.Dtos.BookDto | null>(null);
 watch(() => selected.value, (value) => {
@@ -171,6 +171,9 @@ function importFile(event: any) {
                                 <span :title="trans('book.has_embeddings')" v-if="data.has_embeddings">
                                     <ListBulletIcon class="h-5 w-5" style="color: var(--p-text-color)" />
                                 </span>
+                                <span :title="trans('book.has_description')" v-if="data.has_description">
+                                    <DocumentTextIcon class="h-5 w-5" style="color: var(--p-text-color)" />
+                                </span>
                             </div>
                         </div>
                     </template>
@@ -238,6 +241,16 @@ function importFile(event: any) {
                                     <DropdownLink v-if="can('edit books')" @click="calculateSentiment(data)">
                                         <div class="flex gap-2">
                                             {{ $t("book.calculate_sentiment") }}
+                                        </div>
+                                    </DropdownLink>
+                                    <DropdownLink v-if="can('edit books')" @click="createDescription(data)">
+                                        <div class="flex gap-2">
+                                            {{ $t("book.book_create_prompt") }}
+                                        </div>
+                                    </DropdownLink>
+                                    <DropdownLink v-if="can('edit books')" @click="generateImage(data)">
+                                        <div class="flex gap-2">
+                                            {{ $t("book.book_generate_image") }}
                                         </div>
                                     </DropdownLink>
                                 </template>

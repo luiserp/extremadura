@@ -120,6 +120,48 @@ export const useBook = () => {
         );
     };
 
+    const createDescription = async (book: App.Dtos.BookDto | null) => {
+        const res = await dialog.show({
+            title: trans("book.book_create_prompt"),
+            subtitle: trans("book.book_create_prompt_subtitle"),
+            message: trans("book.book_create_prompt_message"),
+            size: "lg",
+        });
+
+        if (!res) {
+            return;
+        }
+
+        router.get(
+            route("books.create-description"),
+            {
+                to: book ? book.id : null,
+            },
+            { preserveScroll: true }
+        );
+    };
+
+    const generateImage = async (book: App.Dtos.BookDto | null) => {
+        const res = await dialog.show({
+            title: trans("book.book_generate_image"),
+            subtitle: trans("book.book_generate_image_subtitle"),
+            message: trans("book.book_generate_image_message"),
+            size: "lg",
+        });
+
+        if (!res) {
+            return;
+        }
+
+        router.get(
+            route("books.generate-image"),
+            {
+                to: book ? book.id : null,
+            },
+            { preserveScroll: true }
+        );
+    };
+
     const calculateStats = async (book: App.Dtos.BookDto | null) => {
         const res = await dialog.show({
             title: trans("book.calculate_stats"),
@@ -174,5 +216,7 @@ export const useBook = () => {
         calculateEmbedding,
         calculateSentiment,
         calculateStats,
+        generateImage,
+        createDescription,
     };
 };

@@ -10,10 +10,12 @@ use App\Http\Controllers\Book\BookCalculateEmbeddingController;
 use App\Http\Controllers\Book\BookCalculateSentimentController;
 use App\Http\Controllers\Book\BookCalculateStatsController;
 use App\Http\Controllers\Book\BookExportController;
+use App\Http\Controllers\Book\BookGenerateImageController;
 use App\Http\Controllers\Book\BookSetActiveController;
 use App\Http\Controllers\Book\BookUpdateController;
 use App\Http\Controllers\Book\ImportBookController;
 use App\Http\Controllers\Book\DeleteAllBooksController;
+use App\Http\Controllers\BookDescription\BookCreateDescriptionController;
 use App\Http\Controllers\Devtools\DevtoolsController;
 use App\Http\Controllers\Devtools\TestBroadcastingController;
 use App\Http\Controllers\Navigation\NavigationController;
@@ -57,7 +59,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('books/calculate-embedding', BookCalculateEmbeddingController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-embedding');
     Route::get('books/calculate-sentiment', BookCalculateSentimentController::class)->middleware('can:update,App\Models\Book')->name('books.calculate-sentiment');
 
+    // Stats
     Route::get('books/calculate-stats', BookCalculateStatsController::class)->middleware('role:admin')->name('books.calculate-stats');
+
+    // Book Description
+    Route::get('books/create-description', BookCreateDescriptionController::class)->middleware('can:update,App\Models\Book')->name('books.create-description');
+
+    // Image generation
+    Route::get('books/generate-image', BookGenerateImageController::class)->middleware('can:update,App\Models\Book')->name('books.generate-image');
 });
 
 Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');
