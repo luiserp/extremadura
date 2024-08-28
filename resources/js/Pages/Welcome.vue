@@ -56,7 +56,7 @@ defineProps({
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <Card v-for="book in books" :title="book.title" :description="book.description"
-                        :link="route('books.detail', { id: book.id })" />
+                        :image_urls="book.image_urls" :link="route('books.detail', { id: book.id })" />
                 </div>
             </section>
         </Container>

@@ -2,6 +2,7 @@
 
 namespace App\Dtos;
 
+use App\Models\Books\Book;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -28,4 +29,18 @@ class BookDto extends Data
     public ?BookEmbeddingDto $embedding;
     public ?BookSentimentDto $sentiment;
     public ?BookDescriptionDto $bookDescription;
+    public $media = null;
+    public $image_urls = null;
+
+    public function with(): array
+    {
+        $imageUrls = $this->media?->map(function ($media) {
+            return $media->getUrl();
+        });
+
+        return [
+            'image_urls' => $imageUrls
+        ];
+    }
+
 }

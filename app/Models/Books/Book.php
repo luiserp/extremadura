@@ -50,7 +50,7 @@ class Book extends Model implements HasMedia
         return $this->hasOne(BookSentiment::class);
     }
 
-    public function description(): HasOne
+    public function bookDescription(): HasOne
     {
         return $this->hasOne(BookDescription::class);
     }

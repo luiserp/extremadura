@@ -155,11 +155,11 @@ class NLPApiService
 
             $book = $books[$i];
             $title = $book->title;
-            $text = $book->description()->first()->description ?? $book->description;
+            $text = $book->bookDescription()->first()->description ?? $book->description;
 
             $response = Http::connectTimeout(360)->retry(3, 360_000)->post(config('services.nlp.url'). '/comfyui/get-image', [
                 'text' => $text,
-                "seed" => 0
+                "seed" => 2,
             ]);
 
             try {
@@ -169,6 +169,9 @@ class NLPApiService
 
                 Storage::disk('public')->put("images/{$name}", $image);
                 $pathToFile = storage_path("app/public/images/{$name}");
+
+                // Delete previous image
+                $book->clearMediaCollection('books');
 
                 // Save image
                 $book->addMedia($pathToFile)

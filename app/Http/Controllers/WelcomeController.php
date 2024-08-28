@@ -25,7 +25,8 @@ class WelcomeController extends Controller
     public function __invoke(Request $request)
     {
 
-        $books = Book::where('active', 1)->take(6)->get();
+        $books = Book::with(['category', 'authors', 'embedding', 'sentiment', 'bookDescription', 'media'])
+            ->where('active', 1)->take(6)->get();
 
         $bookCitiesStats = $this->bookStatsService->getStats('book_cities');
 

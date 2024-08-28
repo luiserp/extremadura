@@ -32,6 +32,8 @@ authors: Array<App.Dtos.AuthorDto>;
 embedding: App.Dtos.BookEmbeddingDto | null;
 sentiment: App.Dtos.BookSentimentDto | null;
 bookDescription: App.Dtos.BookDescriptionDto | null;
+media: any;
+image_urls: any;
 };
 export type BookEmbeddingDto = {
 id: number;

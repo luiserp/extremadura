@@ -32,7 +32,7 @@ class BookIndexController extends Controller
 
         // Get books
         $books = Book::
-            with(['category', 'authors'])
+            with(['category', 'authors', 'embedding', 'sentiment', 'bookDescription', 'media'])
             // Search
             ->when($filters->search, function ($query, $search) {
                 $query->where('title', 'like', "%$search%")
@@ -71,6 +71,8 @@ class BookIndexController extends Controller
                 perPage: $perPage,
                 page: $page
             );
+
+            // dd($books);
 
         // Get unique Categories
         $categories = Category::all();
