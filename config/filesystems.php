@@ -58,16 +58,16 @@ return [
 
         'comfyui_media' => [
             'driver' => 'local',
-            'root'   => public_path(),
-            'url'    => env('APP_URL').'/comf',
+            'root'   => storage_path('app/public/comf/images'),
+            'url'    => env('APP_URL').'/storage/comf/images',
             'permissions' => [
                 'file' => [
-                    'public' => 7777,
-                    'private' => 7777,
+                    'public' => 0777,
+                    'private' => 0777,
                 ],
                 'dir' => [
-                    'public' => 7777,
-                    'private' => 7777,
+                    'public' => 0777,
+                    'private' => 0777,
                 ],
             ],
         ],

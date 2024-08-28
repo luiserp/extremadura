@@ -53,9 +53,7 @@ class ImageService
      */
     public function storeImage(string $image, string $filename, string $promptId): string
     {
-        $storagePath = config('comfyui.output.image.path');
-
-        $path = $storagePath . "/{$promptId}/{$filename}";
+        $path = "/{$promptId}/{$filename}";
 
         Storage::disk('comfyui_media')->put($path, $image);
 
