@@ -27,6 +27,8 @@ services:
       - redis-extremadura
     networks:
       - laravel
+    extra_hosts: # Enable access to host machine, comfyui is running on host machine
+      - "host.docker.internal:host-gateway"
 
 ####################################################################################################
 # DATABASE (MySQL)
@@ -124,6 +126,8 @@ services:
       - redis-extremadura
     networks:
       - laravel
+    extra_hosts: # Enable access to host machine, comfyui is running on host machine
+      - "host.docker.internal:host-gateway"
     command: ["php", "/var/www/artisan", "horizon"]
 
 ####################################################################################################
@@ -149,6 +153,8 @@ services:
       - redis-extremadura
     networks:
       - laravel
+    extra_hosts: # Enable access to host machine, comfyui is running on host machine
+      - "host.docker.internal:host-gateway"
     command: ["php", "/var/www/artisan", "schedule:work"]
 
 ####################################################################################################
@@ -176,6 +182,8 @@ services:
       - redis-extremadura
     networks:
       - laravel
+    extra_hosts: # Enable access to host machine, comfyui is running on host machine
+      - "host.docker.internal:host-gateway"
 
 networks:
   laravel:

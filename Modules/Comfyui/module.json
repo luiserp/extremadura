@@ -1,0 +1,11 @@
+{
+    "name": "Comfyui",
+    "alias": "comfyui",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Comfyui\\app\\Providers\\ComfyuiServiceProvider"
+    ],
+    "files": []
+}

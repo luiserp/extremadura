@@ -56,6 +56,22 @@ return [
             'throw' => false,
         ],
 
+        'comfyui_media' => [
+            'driver' => 'local',
+            'root'   => public_path(),
+            'url'    => env('APP_URL').'/comf',
+            'permissions' => [
+                'file' => [
+                    'public' => 7777,
+                    'private' => 7777,
+                ],
+                'dir' => [
+                    'public' => 7777,
+                    'private' => 7777,
+                ],
+            ],
+        ],
+
         'media' => [
             'driver' => 'local',
             'root'   => public_path('media'),
