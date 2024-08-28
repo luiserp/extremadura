@@ -21,7 +21,6 @@ use App\Http\Controllers\Devtools\TestBroadcastingController;
 use App\Http\Controllers\Navigation\NavigationController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------

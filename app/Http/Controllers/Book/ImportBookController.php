@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Book;
 
+use App\Events\BooksImportedEvent;
 use App\Facades\Notify;
 use App\Http\Controllers\Controller;
 use App\Jobs\BookImportJob;
@@ -29,7 +30,10 @@ class ImportBookController extends Controller
             $batch[] = new BookImportJob($request->user(), $path . $name);
         }
 
-        Bus::chain($batch)->dispatch();
+        $batch[] = fn () => BooksImportedEvent::dispatch($user);
+
+        Bus::chain($batch)
+           ->dispatch();
 
         Notify::success(trans('book.import_books_in_progress'));
     }

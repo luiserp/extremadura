@@ -11,14 +11,6 @@ use Inertia\Inertia;
 
 class WelcomeController extends Controller
 {
-
-    public function __construct(
-        protected BookStatsService $bookStatsService
-    )
-    {
-        //
-    }
-
     /**
      * Handle the incoming request.
      */
@@ -28,20 +20,8 @@ class WelcomeController extends Controller
         $books = Book::with(['category', 'authors', 'embedding', 'sentiment', 'bookDescription', 'media'])
             ->where('active', 1)->take(6)->get();
 
-        $bookCitiesStats = $this->bookStatsService->getStats('book_cities');
-
-        $bookAuthorsStats = $this->bookStatsService->getStats('book_authors');
-
-        $bookCategoriesStats = $this->bookStatsService->getStats('book_categories');
-
-        $citiesCategoriesStats = $this->bookStatsService->getStats('book_cities_categories');
-
-        return Inertia::render('Welcome', [
+        return Inertia::render('Welcome/Welcome', [
             'books' => BookDto::collect($books),
-            'bookCitiesStats' => BookStatsDto::from($bookCitiesStats),
-            'bookAuthorsStats' => BookStatsDto::from($bookAuthorsStats),
-            'bookCategoriesStats' => BookStatsDto::from($bookCategoriesStats),
-            'citiesCategoriesStats' => BookStatsDto::from($citiesCategoriesStats),
         ]);
     }
 }
