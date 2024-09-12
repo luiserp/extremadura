@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Book\Api;
 
 use App\Dtos\BookDto;
+use App\Dtos\BookFilterDto;
 use App\Http\Controllers\Controller;
 use App\Models\Books\Book;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class BookGetActiveBook extends Controller
     public function __invoke(Request $request)
     {
 
-        Log::info('Get active book');
+        $filters = BookFilterDto::from($request->all());
 
         $books = Book::with(['category', 'editorial', 'authors', 'city', 'embedding', 'sentiment'])
             ->where('active', true)
@@ -29,6 +30,8 @@ class BookGetActiveBook extends Controller
         }
 
         $book = $books->random();
+
+
 
         return response()->json(BookDto::from($book));
     }

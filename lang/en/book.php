@@ -12,6 +12,8 @@ return [
     'authors' => 'Authors',
     'city' => 'City',
     'reference' => 'Full Reference',
+    'images' => 'Images',
+    'prompt' => 'Prompt',
 
     // Actions
     'delete_book' => 'Delete book',
@@ -46,6 +48,11 @@ return [
 
     'import_books_in_progress' => 'The file is being imported. You will receive a notification when the process is complete.',
     'import_books_success' => 'Books have been imported successfully.',
+    'import_books_error' => 'An error occurred while importing the books.',
+
+    'export_books_error' => 'An error occurred while exporting the books.',
+    'export_books_success' => 'Books have been exported successfully.',
+    'export_books_in_progress' => 'The books are being exported. You will receive a notification when the process is complete.',
 
     'delete_all_books' => 'Delete all books',
     'delete_all_books_subtitle' => 'Are you sure you want to delete all books?',

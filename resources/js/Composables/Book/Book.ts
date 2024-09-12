@@ -120,7 +120,7 @@ export const useBook = () => {
         );
     };
 
-    const createDescription = async (book: App.Dtos.BookDto | null) => {
+    const createDescription = async (books: App.Dtos.BookDto[] | null) => {
         const res = await dialog.show({
             title: trans("book.book_create_prompt"),
             subtitle: trans("book.book_create_prompt_subtitle"),
@@ -132,16 +132,18 @@ export const useBook = () => {
             return;
         }
 
+        const ids = books ? books.map((book) => book.id) : [];
+
         router.get(
             route("books.create-description"),
             {
-                to: book ? book.id : null,
+                to: books ? ids : null,
             },
             { preserveScroll: true }
         );
     };
 
-    const generateImage = async (book: App.Dtos.BookDto | null) => {
+    const generateImage = async (books: App.Dtos.BookDto[] | null) => {
         const res = await dialog.show({
             title: trans("book.book_generate_image"),
             subtitle: trans("book.book_generate_image_subtitle"),
@@ -153,10 +155,15 @@ export const useBook = () => {
             return;
         }
 
+        console.log("generate image", books);
+
+
+        const ids = books ? books.map((book) => book.id) : [];
+
         router.get(
             route("books.generate-image"),
             {
-                to: book ? book.id : null,
+                to: books ? ids : null,
             },
             { preserveScroll: true }
         );

@@ -18,6 +18,7 @@ class ComfyUIService
     public function __construct()
     {
         $this->clientId = Uuid::uuid4()->toString();
+
         $this->promptService = new PromptService($this->clientId);
         $this->imageService = new ImageService();
         $this->webSocketService = new WebSocketService($this->clientId);

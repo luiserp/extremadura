@@ -19,12 +19,12 @@ class BookCreateDescriptionController extends Controller
         $to = $request->to;
 
         if ($to) {
-            $books = collect([Book::findOrFail($to)]);
+            $books = collect(Book::findOrFail($to));
         } else {
             $books = Book::all();
         }
 
-        BookCreatePromptJob::dispatch($books, auth()->user());
+        BookCreatePromptJob::dispatch($books, $request->user());
 
         Notify::success(trans('book.book_create_prompt_in_progress'));
 

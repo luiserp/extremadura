@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Book;
 
 use App\Exports\BookExport;
+use App\Facades\Notify;
 use App\Http\Controllers\Controller;
+use App\Jobs\BookExportJob;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,8 +16,10 @@ class BookExportController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return Excel::download(new BookExport(), 'books.csv', \Maatwebsite\Excel\Excel::CSV, [
-            'Content-Type' => 'text/csv',
-        ]);
+
+        dispatch(new BookExportJob($request->user()));
+
+        Notify::success(trans('book.export_books_in_progress'));
+
     }
 }

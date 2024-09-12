@@ -126,7 +126,10 @@ class NLPApiService
         for ($i = 0; $i < count($books); $i++) {
 
             $book = $books[$i];
-            $text = $book->description;
+            $text = "
+                Generate a description for a book cover for the book: $book->title, the book is about:
+                $book->description
+            ";
 
             $response = Http::connectTimeout(360)->retry(3, 360_000)->post(config('services.nlp.url'). '/description', [
                 'text' => $text

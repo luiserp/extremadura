@@ -19,6 +19,7 @@ use App\Http\Controllers\BookDescription\BookCreateDescriptionController;
 use App\Http\Controllers\Devtools\DevtoolsController;
 use App\Http\Controllers\Devtools\TestBroadcastingController;
 use App\Http\Controllers\Navigation\NavigationController;
+use App\Http\Controllers\OllamaTestController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,3 +74,7 @@ Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-
 // Devtools
 Route::get('/devtools/broadcasting-test', TestBroadcastingController::class)->name('devtools.broadcasting-test');
 Route::get('/devtools', DevtoolsController::class)->name('devtools.index');
+
+
+// Ollama
+Route::get('/ollama', OllamaTestController::class)->name('ollama');

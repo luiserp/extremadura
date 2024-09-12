@@ -13,4 +13,7 @@ class BookFilterDto extends Data
     public ?string $year = null;
     public ?array $categories = null;
     public ?array $status = null;
+    public ?array $cities = null;
+    public ?array $catalogs = null;
+    public ?array $authors = null;
 }

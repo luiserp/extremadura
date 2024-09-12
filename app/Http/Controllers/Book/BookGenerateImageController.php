@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\BookGenerateImageJob;
 use App\Models\Books\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 
 class BookGenerateImageController extends Controller
 {
@@ -18,12 +19,17 @@ class BookGenerateImageController extends Controller
         $to = $request->to;
 
         if ($to) {
-            $books = collect([Book::findOrFail($to)]);
+            $books = collect(Book::findOrFail($to));
         } else {
             $books = Book::all();
         }
 
-        BookGenerateImageJob::dispatch($books, auth()->user());
+        $jobs = [];
+        foreach ($books as $book) {
+            $jobs[] = new BookGenerateImageJob(collect([$book]), $request->user());
+        }
+
+        Bus::chain($jobs)->dispatch();
 
         Notify::success(trans('book.book_generate_image_in_progress'));
 

@@ -23,6 +23,13 @@ const bookData = computed(() => {
     return props.book
 });
 
+const bookDescription = computed(() => {
+    return bookData.value.bookDescription?.description ?? '';
+});
+
+console.log(bookData.value);
+
+
 const { showBook, editBook, checkBook, deleteBook } = useBook();
 
 </script>
@@ -39,9 +46,7 @@ const { showBook, editBook, checkBook, deleteBook } = useBook();
                     </Button>
                     </Link>
                 </div>
-                <div
-                    v-if="can('edit books')"
-                    class="flex gap-2">
+                <div v-if="can('edit books')" class="flex gap-2">
                     <Button @click="checkBook(bookData)" outlined>
                         {{ trans('common.check') }}
                     </Button>
@@ -86,12 +91,22 @@ const { showBook, editBook, checkBook, deleteBook } = useBook();
                 </div>
             </div>
             <div class="mt-4 space-y-2">
-                <h2 class="ml-4 font-semibold">{{ trans('book.description') }}</h2>
+                <h2 class="font-semibold">{{ trans('book.description') }}</h2>
                 <Textarea v-model="bookData.description" rows="8" cols="30" class="w-full" readonly />
             </div>
             <div class="mt-4 space-y-2">
-                <h2 class="ml-4 font-semibold">{{ trans('book.reference') }}</h2>
+                <h2 class="font-semibold">{{ trans('book.reference') }}</h2>
                 <Textarea v-model="bookData.reference" rows="8" cols="30" class="w-full" readonly />
+            </div>
+        </Container>
+        <Container>
+            <div class="mt-4 space-y-2">
+                <h2 class="font-semibold">{{ trans('book.prompt') }}</h2>
+                <Textarea v-model="bookDescription" rows="8" cols="30" class="w-full" readonly />
+            </div>
+            <div class="mt-4 space-y-2 space-x-1">
+                <h2 class="font-semibold">{{ trans('book.images') }}</h2>
+                <img :src="bookData.image_urls" alt="book image" class="max-h-64 object-contain rounded" />
             </div>
         </Container>
     </AppLayout>

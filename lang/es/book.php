@@ -12,6 +12,8 @@ return [
     'authors' => 'Autores',
     'city' => 'Ciudad',
     'reference' => 'Referencia completa',
+    'images' => 'Imágenes',
+    'prompt' => 'Prompt',
 
     // Actions
     'delete_book' => 'Eliminar libro',
@@ -46,6 +48,11 @@ return [
 
     'import_books_in_progress' => 'El archivo se está importando. Recibirás una notificación cuando el proceso haya finalizado.',
     'import_books_success' => 'Los libros se han importado correctamente.',
+    'import_books_error' => 'Se ha producido un error al importar los libros.',
+
+    'export_books_error' => 'Se ha producido un error al exportar los libros.',
+    'export_books_success' => 'Los libros se han exportado correctamente.',
+    'export_books_in_progress' => 'Los libros se están exportando. Recibirás una notificación cuando el proceso haya finalizado.',
 
     'delete_all_books' => 'Eliminar todos los libros',
     'delete_all_books_subtitle' => '¿Estás seguro de que quieres eliminar todos los libros?',

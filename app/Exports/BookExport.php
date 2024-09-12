@@ -9,12 +9,18 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class BookExport implements FromCollection, WithHeadings, WithMapping
 {
+
+    public function __construct(protected string $catalog)
+    {
+        //
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Book::all();
+        return Book::where('catalog', $this->catalog)->get();
     }
 
     public function headings(): array

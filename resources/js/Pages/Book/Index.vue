@@ -6,8 +6,8 @@ import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { Paginator as TypePaginator } from '@/types/paginator';
-import { ArrowDownOnSquareIcon, ArrowPathIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, DocumentTextIcon, HeartIcon, ListBulletIcon, TrashIcon } from '@heroicons/vue/24/outline';
-import { router } from '@inertiajs/vue3';
+import { ArrowDownOnSquareIcon, ArrowPathIcon, ArrowUpOnSquareIcon, CalculatorIcon, Cog6ToothIcon, DocumentTextIcon, HeartIcon, ListBulletIcon, PhotoIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { Link, router } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
@@ -34,6 +34,8 @@ const props = defineProps({
         required: true
     },
 });
+
+const selectedBooks = ref<App.Dtos.BookDto[]>([]);
 
 const booksData = computed(() => {
     return props.books.data
@@ -103,12 +105,12 @@ function importFile(event: any) {
                     </form>
 
                     <!-- Export -->
-                    <a v-if="can('download books')" :href="route('books.export')">
+                    <Link v-if="can('download books')" :href="route('books.export')">
                         <Button severity="secondary" outlined>
                             {{ $t('common.export') }}
                             <ArrowDownOnSquareIcon class="h-6 w-6" />
                         </Button>
-                    </a>
+                    </Link>
                     <!-- Actions -->
                     <Dropdown v-if="can('edit books')" width="66">
                         <template #trigger>
@@ -134,6 +136,16 @@ function importFile(event: any) {
                                     {{ $t("book.calculate_stats") }}
                                 </div>
                             </DropdownLink>
+                            <DropdownLink @click="createDescription(selectedBooks)">
+                                <div class="flex gap-2">
+                                    {{ $t("book.book_create_prompt") }}
+                                </div>
+                            </DropdownLink>
+                            <DropdownLink @click="generateImage(selectedBooks)">
+                                <div class="flex gap-2">
+                                    {{ $t("book.book_generate_image") }}
+                                </div>
+                            </DropdownLink>
                         </template>
                     </Dropdown>
                     <!-- Delete -->
@@ -150,8 +162,9 @@ function importFile(event: any) {
         </Container>
 
         <Container>
-            <DataTable :value="booksData" tableStyle="min-width: 50rem" rowHover @row-dblclick="selected = $event.data"
-                :rowClass="() => 'cursor-pointer select-none'">
+            <DataTable v-model:selection="selectedBooks" :value="booksData" tableStyle="min-width: 50rem" rowHover
+                @row-dblclick="selected = $event.data" :rowClass="() => 'cursor-pointer select-none'">
+                <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
                 <Column :header="trans('book.title')">
                     <template #body="{ data }">
                         <div :title="data.title" class="truncate max-h-18 max-w-64">
@@ -173,6 +186,9 @@ function importFile(event: any) {
                                 </span>
                                 <span :title="trans('book.has_description')" v-if="data.has_description">
                                     <DocumentTextIcon class="h-5 w-5" style="color: var(--p-text-color)" />
+                                </span>
+                                <span :title="trans('book.has_images')" v-if="data.image_urls.length > 0">
+                                    <PhotoIcon class="h-5 w-5" style="color: var(--p-text-color)" />
                                 </span>
                             </div>
                         </div>
@@ -243,12 +259,12 @@ function importFile(event: any) {
                                             {{ $t("book.calculate_sentiment") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink v-if="can('edit books')" @click="createDescription(data)">
+                                    <DropdownLink v-if="can('edit books')" @click="createDescription([data])">
                                         <div class="flex gap-2">
                                             {{ $t("book.book_create_prompt") }}
                                         </div>
                                     </DropdownLink>
-                                    <DropdownLink v-if="can('edit books')" @click="generateImage(data)">
+                                    <DropdownLink v-if="can('edit books')" @click="generateImage([data])">
                                         <div class="flex gap-2">
                                             {{ $t("book.book_generate_image") }}
                                         </div>

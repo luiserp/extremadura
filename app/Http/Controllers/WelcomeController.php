@@ -18,7 +18,7 @@ class WelcomeController extends Controller
     {
 
         $books = Book::with(['category', 'authors', 'embedding', 'sentiment', 'bookDescription', 'media'])
-            ->where('active', 1)->take(6)->get();
+            ->where('active', 1)->inRandomOrder()->take(12)->get();
 
         return Inertia::render('Welcome/Welcome', [
             'books' => BookDto::collect($books),
