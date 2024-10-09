@@ -4,12 +4,12 @@ import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
 import { capitalizeWords } from '@/Services/Utils';
 import { App } from '@/types/app';
-import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
+import { ArrowLeftIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
 import Panel from 'primevue/panel';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
@@ -23,14 +23,14 @@ const props = defineProps({
     categories: {
         type: Array as () => App.Dtos.CategoryDto[],
         required: true
-}
+    }
 });
 
 const bookData = computed(() => {
     return props.book
 });
 
-const { form, setForm, showBook, checkBook, editBook, deleteBook, updateBook } = useBook();
+const { form, setForm, showBook, checkBook, editBook, deleteBook, updateBook, deleteImage } = useBook();
 
 const back = () => {
     showBook(bookData.value.id);
@@ -40,6 +40,8 @@ const back = () => {
 onMounted(() => {
     setForm(props.book);
 });
+
+const bookDescription = ref(bookData.value.bookDescription?.description ?? '');
 
 </script>
 
@@ -53,9 +55,7 @@ onMounted(() => {
                         <ArrowLeftIcon class="h-5 w-5" />
                     </Button>
                 </div>
-                <div
-                    v-if="can('edit books')"
-                    class="flex gap-2">
+                <div v-if="can('edit books')" class="flex gap-2">
                     <Button @click="checkBook(bookData)" outlined>
                         {{ trans('common.check') }}
                     </Button>
@@ -72,7 +72,7 @@ onMounted(() => {
         <Container>
             <div class="flex justify-between flex-wrap">
                 <div class="flex-auto space-y-2">
-                    <div class="flex gap-2 items-center text-xl font-bold">
+                    <div class="flex gap-2 items-center text-xl">
                         <InputText id="year" type="text" v-model="form.title" />
                     </div>
                     <div class="flex gap-2 flex-col">
@@ -116,11 +116,29 @@ onMounted(() => {
                 <h2 class="ml-4 font-semibold">{{ trans('book.reference') }}</h2>
                 <Textarea v-model="form.reference" rows="8" cols="30" class="w-full" />
             </div>
+        </Container>
 
-            <pre>
-                {{ bookData }}
-            </pre>
-
+        <!-- AI -->
+        <Container>
+            <div class="mt-4 space-y-2">
+                <h2 class="font-semibold">{{ trans('book.prompt') }}</h2>
+                <Textarea v-model="bookDescription" rows="8" cols="30" class="w-full" />
+            </div>
+            <div class="">
+                <h2 class="font-semibold">{{ trans('book.images') }}</h2>
+                <div
+                    v-for="image in bookData.image_urls"
+                    class="group relative inline-block max-w-64">
+                    <div
+                        @click="deleteImage(image.id)"
+                        class="absolute w-full backdrop-blur-sm h-10 bg-white/30 borde group-hover:opacity-100 opacity-0 transition">
+                        <span class="absolute right-1 top-1 cursor-pointer">
+                            <XCircleIcon class="h-5 w-5 text-gray-700 hover:text-gray-800" />
+                        </span>
+                    </div>
+                    <img :src="image.url" alt="book image" class="object-cover" />
+                </div>
+            </div>
         </Container>
 
     </AppLayout>

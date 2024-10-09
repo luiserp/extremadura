@@ -16,7 +16,11 @@ class BookDetailController extends Controller
     public function __invoke(Request $request, string $id)
     {
 
-        $book = Book::with(['category', 'editorial', 'authors', 'city', 'media', 'embedding', 'sentiment', 'bookDescription'])
+        $book = Book::with([
+            'category', 'editorial', 'authors',
+            'city', 'media', 'embedding', 'sentiment',
+            'bookDescription'
+        ])
             ->where('id', $id)
             ->firstOrFail();
 

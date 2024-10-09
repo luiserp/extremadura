@@ -99,6 +99,7 @@ const { showBook, editBook, checkBook, deleteBook } = useBook();
                 <Textarea v-model="bookData.reference" rows="8" cols="30" class="w-full" readonly />
             </div>
         </Container>
+        <!-- AI -->
         <Container>
             <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.prompt') }}</h2>

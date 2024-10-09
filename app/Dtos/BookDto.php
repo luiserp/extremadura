@@ -35,7 +35,10 @@ class BookDto extends Data
     public function with(): array
     {
         $imageUrls = $this->media?->map(function ($media) {
-            return $media->getUrl();
+            return [
+                'id' => $media->id,
+                'url' => $media->getUrl()
+            ];
         });
 
         return [

@@ -194,6 +194,11 @@ export const useBook = () => {
         );
     };
 
+    const deleteImage = async (imageId: number) => {
+        console.log("delete image", imageId);
+    };
+
+
     const setForm = (book: App.Dtos.BookDto) => {
         form.title = book.title;
         form.authors = book.authors;
@@ -225,5 +230,6 @@ export const useBook = () => {
         calculateStats,
         generateImage,
         createDescription,
+        deleteImage,
     };
 };
