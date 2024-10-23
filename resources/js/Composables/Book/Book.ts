@@ -198,6 +198,13 @@ export const useBook = () => {
         console.log("delete image", imageId);
     };
 
+    const setStatus = (book: App.Dtos.BookDto) => {
+        router.get(
+            route("books.set-active", { id: book.id }),
+            {},
+            { preserveScroll: true }
+        );
+    };
 
     const setForm = (book: App.Dtos.BookDto) => {
         form.title = book.title;
@@ -231,5 +238,6 @@ export const useBook = () => {
         generateImage,
         createDescription,
         deleteImage,
+        setStatus,
     };
 };

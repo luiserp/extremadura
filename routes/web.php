@@ -5,6 +5,7 @@ use App\Http\Controllers\Book\BookIndexController;
 use App\Http\Controllers\Book\BookDetailController;
 use App\Http\Controllers\Book\BookEditController;
 use App\Http\Controllers\Book\Api\BookGetActiveBook;
+use App\Http\Controllers\Book\Api\BookGetBounds;
 use App\Http\Controllers\Book\BookAskAssistantController;
 use App\Http\Controllers\Book\BookCalculateEmbeddingController;
 use App\Http\Controllers\Book\BookCalculateSentimentController;
@@ -69,12 +70,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('books/generate-image', BookGenerateImageController::class)->middleware('can:update,App\Models\Book')->name('books.generate-image');
 });
 
+Route::get('/books/get-bounds/{id}', BookGetBounds::class)->name('books.get-bounds');
 Route::get('/books/get-active-book', BookGetActiveBook::class)->name('books.get-active-book');
 
 // Devtools
 Route::get('/devtools/broadcasting-test', TestBroadcastingController::class)->name('devtools.broadcasting-test');
 Route::get('/devtools', DevtoolsController::class)->name('devtools.index');
-
 
 // Ollama
 Route::get('/ollama', OllamaTestController::class)->name('ollama');

@@ -25,7 +25,7 @@ class BookDetailController extends Controller
             ->firstOrFail();
 
         return Inertia::render('Book/Detail', [
-            'book' => BookDto::from($book),
+            'book' => BookDto::withBoundaries($book),
         ]);
 
 

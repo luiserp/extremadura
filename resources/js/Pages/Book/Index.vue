@@ -49,7 +49,7 @@ const currentPage = computed(() => {
     return props.books.per_page * (props.books.current_page - 1);
 });
 
-const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment, calculateStats, createDescription, generateImage } = useBook();
+const { showBook, editBook, deleteBook, deleteAllBooks, calculateEmbedding, calculateSentiment, calculateStats, createDescription, generateImage, setStatus } = useBook();
 
 const selected = ref<App.Dtos.BookDto | null>(null);
 watch(() => selected.value, (value) => {
@@ -58,9 +58,7 @@ watch(() => selected.value, (value) => {
     }
 });
 
-const setStatus = (book: App.Dtos.BookDto) => {
-    router.get(route('books.set-active', { id: book.id }), {}, { preserveScroll: true });
-}
+
 
 // Import
 const inputImport = ref<HTMLInputElement | null>(null);

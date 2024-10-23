@@ -72,8 +72,6 @@ class BookIndexController extends Controller
                 page: $page
             );
 
-            // dd($books);
-
         // Get unique Categories
         $categories = Category::all();
 

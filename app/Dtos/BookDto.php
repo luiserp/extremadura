@@ -31,6 +31,30 @@ class BookDto extends Data
     public ?BookDescriptionDto $bookDescription;
     public $media = null;
     public $image_urls = null;
+    public ?BookDto $nextBook;
+    public ?BookDto $previousBook;
+
+    // Control the data that is returned
+    public $withBoundaries = false;
+
+    public static function withBoundaries(mixed $data): static
+    {
+        $book = self::from($data);
+        $book->withBoundaries = true;
+
+        $nextBook = Book::where('id', '>', $book->id)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        $previousBook = Book::where('id', '<', $book->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $book->nextBook = $nextBook ? self::from($nextBook) : null;
+        $book->previousBook = $previousBook ? self::from($previousBook) : null;
+
+        return $book;
+    }
 
     public function with(): array
     {

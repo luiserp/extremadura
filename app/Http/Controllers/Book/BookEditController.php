@@ -28,7 +28,7 @@ class BookEditController extends Controller
         $categories = Category::all();
 
         return Inertia::render('Book/Edit', [
-            'book' => BookDto::from($book),
+            'book' => BookDto::withBoundaries($book),
             'categories' => CategoryDto::collect($categories),
         ]);
     }

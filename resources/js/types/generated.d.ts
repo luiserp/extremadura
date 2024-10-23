@@ -5,6 +5,11 @@ name: string;
 created_at: string;
 updated_at: string;
 };
+export type BookBoundsDto = {
+book: App.Dtos.BookDto | null;
+nextBook: App.Dtos.BookDto | null;
+previousBook: App.Dtos.BookDto | null;
+};
 export type BookDescriptionDto = {
 id: number;
 book_id: string;
@@ -34,6 +39,9 @@ sentiment: App.Dtos.BookSentimentDto | null;
 bookDescription: App.Dtos.BookDescriptionDto | null;
 media: any;
 image_urls: any;
+nextBook: App.Dtos.BookDto | null;
+previousBook: App.Dtos.BookDto | null;
+withBoundaries: any;
 };
 export type BookEmbeddingDto = {
 id: number;
@@ -49,6 +57,9 @@ dates: Array<any> | null;
 year: string | null;
 categories: Array<any> | null;
 status: Array<any> | null;
+cities: Array<any> | null;
+catalogs: Array<any> | null;
+authors: Array<any> | null;
 };
 export type BookSentimentDto = {
 id: number;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PrevAndNextButtons from '@/Components/Books/PrevAndNextButtons.vue';
 import Container from '@/Components/Container/Container.vue';
 import { useBook } from '@/Composables/Book/Book';
 import AppLayout from '@/Layouts/App/AppLayout.vue';
@@ -9,6 +10,7 @@ import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
+import ToggleSwitch from 'primevue/toggleswitch';
 import { computed } from 'vue';
 import { route } from 'ziggy-js';
 
@@ -30,7 +32,7 @@ const bookDescription = computed(() => {
 console.log(bookData.value);
 
 
-const { showBook, editBook, checkBook, deleteBook } = useBook();
+const { showBook, editBook, checkBook, deleteBook, setStatus } = useBook();
 
 </script>
 
@@ -61,35 +63,47 @@ const { showBook, editBook, checkBook, deleteBook } = useBook();
         </template>
 
         <Container>
-            <div class="flex justify-between flex-wrap">
-                <div class="flex-auto space-y-2">
-                    <h1 class="text-xl font-bold">{{ bookData.title }}</h1>
-                    <div class="flex gap-2 flex-col">
-                        <h2>{{ trans('book.authors') }}</h2>
-                        <p v-for="author in bookData.authors">
-                            {{ author.name }}
+            <div class="flex justify-between">
+                <div class="flex justify-between flex-wrap grow">
+                    <div class="flex-auto space-y-2">
+                        <h1 class="text-xl font-bold">{{ bookData.title }}</h1>
+                        <div class="flex gap-2 flex-col">
+                            <h2>{{ trans('book.authors') }}</h2>
+                            <p v-for="author in bookData.authors">
+                                {{ author.name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex-auto space-y-2">
+                        <h1 class="text-xl font-bold">{{ trans('common.metadata') }}</h1>
+                        <p>
+                            {{ trans('book.year') + ': ' + bookData.year }}
+                        </p>
+                        <p>
+                            {{ trans('book.catalog') + ': ' + bookData.catalog }}
+                        </p>
+                        <p>
+                            {{ trans('book.editorial') + ': ' + bookData.editorial }}
+                        </p>
+                        <p>
+                            {{ trans('book.city') + ': ' + bookData.city }}
+                        </p>
+                        <p>
+                            {{ trans('book.category') + ': ' + capitalizeWords(bookData.category?.name ?? '') }}
                         </p>
                     </div>
                 </div>
-                <div class="flex-auto space-y-2">
-                    <h1 class="text-xl font-bold">{{ trans('common.metadata') }}</h1>
-                    <p>
-                        {{ trans('book.year') + ': ' + bookData.year }}
-                    </p>
-                    <p>
-                        {{ trans('book.catalog') + ': ' + bookData.catalog }}
-                    </p>
-                    <p>
-                        {{ trans('book.editorial') + ': ' + bookData.editorial }}
-                    </p>
-                    <p>
-                        {{ trans('book.city') + ': ' + bookData.city }}
-                    </p>
-                    <p>
-                        {{ trans('book.category') + ': ' + capitalizeWords(bookData.category?.name ?? '') }}
-                    </p>
+                <div>
+                    <!-- Back and Next Book Button -->
+                    <PrevAndNextButtons :bookData="bookData" />
+
+                    <div class="flex justify-center mt-4 gap-2">
+                        <label for="active">{{ trans('common.status') + ':' }}</label>
+                        <ToggleSwitch v-model="bookData.active" @change="setStatus(bookData)" />
+                    </div>
                 </div>
             </div>
+
             <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.description') }}</h2>
                 <Textarea v-model="bookData.description" rows="8" cols="30" class="w-full" readonly />
