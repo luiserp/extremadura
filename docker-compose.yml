@@ -1,194 +1,208 @@
+version: '3'
 services:
+    ####################################################################################################
+    # app
+    ####################################################################################################
+    app-extremadura:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile
+            args:
+                user: developer
+                uid: 1000
+        image: app-extremadura
+        container_name: app-extremadura
+        restart: unless-stopped
+        links:
+            - mysql-extremadura
+        environment:
+            VIRTUAL_HOST: extremadura.luiserp.com
+            PHP_FPM_POOL_NAME: "app-extremadura"
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www/
+            - ~/.ssh:/root/.ssh
+        depends_on:
+            - mysql-extremadura
+            - redis-extremadura
+        networks:
+            - laravel
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
-####################################################################################################
-# app
-####################################################################################################
-  app-extremadura:
-    build:
-      args:
-        user: developer
-        uid: 1000
-      context: ./
-      dockerfile: ./docker/Dockerfile
-    image: app-extremadura
-    container_name: app-extremadura
-    restart: unless-stopped
-    links:
-      - mysql-extremadura
-    environment:
-      VIRTUAL_HOST: extremadura.luiserp.com
-      PHP_FPM_POOL_NAME: "app-extremadura"
-    working_dir: /var/www/
-    volumes:
-      - ./:/var/www
-      - ~/.ssh:/root/.ssh
-    depends_on:
-      - mysql-extremadura
-      - redis-extremadura
-    networks:
-      - laravel
-    extra_hosts: # Enable access to host machine, comfyui is running on host machine
-      - "host.docker.internal:host-gateway"
+    ####################################################################################################
+    # DATABASE (MySQL)
+    ####################################################################################################
+    mysql-extremadura:
+        image: mysql:8.0
+        container_name: mysql-extremadura
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+        volumes:
+            - mysql-extremadura:/var/lib/mysql
+            - mysql-extremadura:/var/log/mysql
+        networks:
+            - laravel
 
-####################################################################################################
-# DATABASE (MySQL)
-####################################################################################################
-  mysql-extremadura:
-    image: mysql:8.0
-    container_name: mysql-extremadura
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    #   MYSQL_HOST: '%' # Allow connections from any host
-    #   MYSQL_ROOT_HOST: '%' # Allow connections from any host
-    volumes:
-      - mysql-extremadura:/var/lib/mysql
-      - mysql-extremadura:/var/log/mysql
-    networks:
-      - laravel
+    ####################################################################################################
+    # Nginx
+    ####################################################################################################
+    nginx-extremadura:
+        image: nginx:alpine
+        container_name: nginx-extremadura
+        restart: unless-stopped
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./:/var/www/
+            - ./docker/docker-compose/nginx:/etc/nginx/conf.d
+            - ./docker/docker-compose/nginx/ssl:/etc/nginx/conf.d/ssl
+        networks:
+            - laravel
 
-####################################################################################################
-# Nginx
-####################################################################################################
-  nginx-extremadura:
-    image: nginx:alpine
-    container_name: nginx-extremadura
-    restart: unless-stopped
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./:/var/www
-      - ./docker/docker-compose/nginx:/etc/nginx/conf.d
-      - ./docker/docker-compose/nginx/ssl:/etc/nginx/conf.d/ssl
-    networks:
-      - laravel
+    ####################################################################################################
+    # phpMyAdmin
+    ####################################################################################################
+    phpmyadmin-extremadura:
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: phpmyadmin-extremadura
+        restart: unless-stopped
+        ports:
+            - 8080:80
+        links:
+            - mysql-extremadura
+        environment:
+            PMA_HOST: mysql-extremadura
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        networks:
+            - laravel
 
-####################################################################################################
-# phpMyAdmin
-####################################################################################################
-  phpmyadmin-extremadura:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin-extremadura
-    ports:
-        - 8080:80
-    links:
-        - mysql-extremadura
-    restart: unless-stopped
-    environment:
-        PMA_HOST: mysql-extremadura
-        PMA_PORT: 3306
-        PMA_ARBITRARY: 1
-    networks:
-        - laravel
+    ####################################################################################################
+    # Redis
+    ####################################################################################################
+    redis-extremadura:
+        image: redis:alpine
+        container_name: redis-extremadura
+        restart: unless-stopped
+        volumes:
+            - redis-extremadura:/data
+        ports:
+            - "6379:6379"
+        networks:
+            - laravel
 
-####################################################################################################
-# Redis
-####################################################################################################
-  redis-extremadura:
-    image: "redis:alpine"
-    container_name: redis-extremadura
-    restart: unless-stopped
-    volumes:
-        - redis-extremadura:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - laravel
+    ####################################################################################################
+    # Horizon
+    ####################################################################################################
+    horizon-extremadura:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile.horizon
+            args:
+                user: developer
+                uid: 1000
+        image: app-extremadura
+        container_name: horizon-extremadura
+        restart: unless-stopped
+        environment:
+            PHP_FPM_POOL_NAME: "horizon-extremadura"
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www/
+        depends_on:
+            - mysql-extremadura
+            - redis-extremadura
+        networks:
+            - laravel
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        command: ["php", "/var/www/artisan", "horizon"]
 
-####################################################################################################
-# Horizon
-####################################################################################################
-  horizon-extremadura:
-    build:
-      args:
-        user: developer
-        uid: 1000
-      context: ./
-      dockerfile: ./docker/Dockerfile.horizon
-    image: app-extremadura
-    container_name: horizon-extremadura
-    restart: unless-stopped
-    environment:
-      PHP_FPM_POOL_NAME: "horizon-extremadura"
-    working_dir: /var/www/
-    volumes:
-      - ./:/var/www
-    depends_on:
-      - mysql-extremadura
-      - redis-extremadura
-    networks:
-      - laravel
-    extra_hosts: # Enable access to host machine, comfyui is running on host machine
-      - "host.docker.internal:host-gateway"
-    command: ["php", "/var/www/artisan", "horizon"]
+    ####################################################################################################
+    # Scheduler
+    ####################################################################################################
+    scheduler-extremadura:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile.horizon
+            args:
+                user: developer
+                uid: 1000
+        image: app-extremadura
+        container_name: scheduler-extremadura
+        restart: unless-stopped
+        environment:
+            PHP_FPM_POOL_NAME: "scheduler-extremadura"
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www/
+        depends_on:
+            - mysql-extremadura
+            - redis-extremadura
+        networks:
+            - laravel
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        command: ["php", "/var/www/artisan", "schedule:work"]
 
-####################################################################################################
-# Scheduler
-####################################################################################################
-  scheduler-extremadura:
-    build:
-      args:
-        user: developer
-        uid: 1000
-      context: ./
-      dockerfile: ./docker/Dockerfile.horizon
-    image: app-extremadura
-    container_name: scheduler-extremadura
-    restart: unless-stopped
-    environment:
-      PHP_FPM_POOL_NAME: "scheduler-extremadura"
-    working_dir: /var/www/
-    volumes:
-      - ./:/var/www
-    depends_on:
-      - mysql-extremadura
-      - redis-extremadura
-    networks:
-      - laravel
-    extra_hosts: # Enable access to host machine, comfyui is running on host machine
-      - "host.docker.internal:host-gateway"
-    command: ["php", "/var/www/artisan", "schedule:work"]
+    ####################################################################################################
+    # Reverb
+    ####################################################################################################
+    reverb-extremadura:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile.reverb
+            args:
+                user: developer
+                uid: 1000
+        image: reverb-extremadura
+        container_name: reverb-extremadura
+        restart: unless-stopped
+        ports:
+            - 9001:9001
+        environment:
+            PHP_FPM_POOL_NAME: "reverb-extremadura"
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www/
+        depends_on:
+            - mysql-extremadura
+            - redis-extremadura
+        networks:
+            - laravel
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
-####################################################################################################
-# Reverb
-####################################################################################################
-  reverb-extremadura:
-    build:
-      args:
-        user: developer
-        uid: 1000
-      context: ./
-      dockerfile: ./docker/Dockerfile.reverb
-    image: reverb-extremadura
-    container_name: reverb-extremadura
-    restart: unless-stopped
-    ports:
-      - 9001:9001
-    environment:
-      PHP_FPM_POOL_NAME: "reverb-extremadura"
-    working_dir: /var/www/
-    volumes:
-      - ./:/var/www
-    depends_on:
-      - mysql-extremadura
-      - redis-extremadura
-    networks:
-      - laravel
-    extra_hosts: # Enable access to host machine, comfyui is running on host machine
-      - "host.docker.internal:host-gateway"
+    ####################################################################################################
+    # Cloudflare Tunnel
+    ####################################################################################################
+    cloudflared:
+        image: cloudflare/cloudflared:latest
+        container_name: cloudflared
+        command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
+        restart: unless-stopped
+        networks:
+            - laravel
 
 networks:
-  laravel:
-    driver: bridge
+    laravel:
+        driver: bridge
 
 volumes:
-  mysql-extremadura:
-  redis-extremadura:
+    mysql-extremadura:
+    redis-extremadura:

@@ -42,9 +42,9 @@ class BookExportJob implements ShouldQueue
 
             foreach ($catalogs as $catalog) {
 
-                $pathToStore = "public/exports/{$this->user->id}/books_{$catalog}.csv";
+                $pathToStore = "exports/{$this->user->id}/books_{$catalog}.csv";
 
-                Excel::store(new BookExport($catalog), $pathToStore, null, null, [
+                Excel::store(new BookExport($catalog), $pathToStore, 'public', null, [
                     'visibility' => 'public',
                 ]);
 

@@ -50,6 +50,9 @@ const filtersOptions = computed(() => {
         categories.options.push({ value: category.id, label: capitalizeWords(category.name), checked: false });
     });
 
+    // Sort by categories name
+    categories.options.sort((a, b) => a.label.localeCompare(b.label));
+
     filters.push(categories);
 
     if (can('edit books')) {
