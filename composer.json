@@ -18,7 +18,7 @@
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1",
         "nwidart/laravel-modules": "*",
-        "predis/predis": "2.0",
+        "predis/predis": "^2.0",
         "spatie/color": "^1.5",
         "spatie/laravel-data": "^4.7",
         "spatie/laravel-medialibrary": "^11.9",

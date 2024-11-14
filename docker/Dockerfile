@@ -15,7 +15,10 @@ RUN apk update && apk add \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
-    libxml2-dev
+    libxml2-dev \
+    build-base \
+    autoconf \
+    libtool
 
 RUN docker-php-ext-install pdo pdo_mysql pcntl exif \
     && apk --no-cache add nodejs npm
@@ -27,6 +30,9 @@ RUN apk add \
         libzip-dev \
         zip \
   && docker-php-ext-install zip
+
+# Instalar y habilitar extensión de Redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
