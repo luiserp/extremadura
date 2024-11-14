@@ -104,10 +104,10 @@ function importFile(event: any) {
 
                     <!-- Export -->
                     <Link v-if="can('download books')" :href="route('books.export')">
-                        <Button severity="secondary" outlined>
-                            {{ $t('common.export') }}
-                            <ArrowDownOnSquareIcon class="h-6 w-6" />
-                        </Button>
+                    <Button severity="secondary" outlined>
+                        {{ $t('common.export') }}
+                        <ArrowDownOnSquareIcon class="h-6 w-6" />
+                    </Button>
                     </Link>
                     <!-- Actions -->
                     <Dropdown v-if="can('edit books')" width="66">
@@ -209,7 +209,7 @@ function importFile(event: any) {
                 <Column field="city" :header="trans('book.city')"></Column>
                 <Column :header="trans('book.description')">
                     <template #body="{ data }">
-                        <div class="truncate max-h-14 max-w-80">
+                        <div class="truncate max-h-14 max-w-72">
                             {{ data.description }}
                         </div>
                     </template>
@@ -277,6 +277,9 @@ function importFile(event: any) {
             <div class="mt-6">
                 <Paginator :rows="books.per_page" :totalRecords="books.total"
                     :rowsPerPageOptions="[5, 10, 15, 20, 50, 100]" :first="currentPage" @page="onPageChange">
+                    <template #start="slotProps">
+                        {{ $t('pagination.total_records') }} : {{ books.total }}
+                    </template>
                 </Paginator>
             </div>
         </Container>

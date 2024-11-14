@@ -8,9 +8,11 @@ use App\Models\Books\Category;
 use App\Models\Books\Editorial;
 use App\Models\Books\City;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
 class BookImport implements ToCollection, WithHeadingRow
 {
@@ -21,54 +23,56 @@ class BookImport implements ToCollection, WithHeadingRow
     {
         foreach ($collection as $row) {
 
-            // if ($row['author'] === '' || $row['editorial'] === '' || $row['category'] === '' || $row['title'] === ''
-            //     || $row['author'] === null || $row['editorial'] === null || $row['category'] === null || $row['title'] === null
-            // ) {
-            //     continue;
-            // }
+            try {
+                $authorsRows = explode(';', $row['author']);
+                $authors = [];
 
-            $authorsRows = explode(';', $row['author']);
-            $authors = [];
+                foreach ($authorsRows as $author) {
+                    $authors[] = Author::firstOrCreate([
+                        'name' => $this->encodeUtf8($author),
+                    ]);
+                }
 
-            foreach ($authorsRows as $author) {
-                $authors[] = Author::firstOrCreate([
-                    'name' => $this->encodeUtf8($author),
+                if (array_key_exists('category', $row->toArray())) {
+                    $category = Category::firstOrCreate([
+                        'name' => Str::trim(Str::upper(strtolower($this->encodeUtf8($row['category'])))),
+                    ]);
+                } else {
+                    $category = Category::firstOrCreate([
+                        'name' => 'Desconocida',
+                    ]);
+                }
+
+                if ($row['city'] === '' || $row['city'] === null) {
+                    $row['city'] = 'Desconocida';
+                }
+
+                $year = is_numeric($row['year']) ? $row['year'] : null;
+
+                $book = Book::firstOrCreate(
+                    [
+                        'title' => $this->encodeUtf8($row['title']),
+                        'year' => $year,
+                    ],
+                    [
+                        'description' => array_key_exists('description', $row->toArray()) ? $row['description'] : null,
+                        'catalog' => $this->encodeUtf8($row['catalog']),
+                        'category_id' => $category->id,
+                        'editorial' => $this->encodeUtf8($row['editorial']),
+                        'city' => $this->encodeUtf8($row['city']),
+                        'reference' => $this->encodeUtf8($row['reference']),
+                        'active' => true,
+                    ]
+                );
+
+                $book->authors()->sync(collect($authors)->pluck('id'));
+
+            } catch (\Exception $e) {
+                Log::error('Error importing book: ', [
+                    'message' => $e->getMessage(),
+                    'row' => $row,
                 ]);
             }
-
-            if (array_key_exists('category', $row->toArray())) {
-                $category = Category::firstOrCreate([
-                    'name' => Str::trim(Str::upper(strtolower($this->encodeUtf8($row['category'])))),
-                ]);
-            } else {
-                $category = Category::firstOrCreate([
-                    'name' => 'Desconocida',
-                ]);
-            }
-
-            if ($row['city'] === '' || $row['city'] === null) {
-                $row['city'] = 'Desconocida';
-            }
-
-            $year = is_numeric($row['year']) ? $row['year'] : null;
-
-            $book = Book::firstOrCreate(
-                [
-                    'title' => $this->encodeUtf8($row['title']),
-                    'year' => $year,
-                ],
-                [
-                    'description' => array_key_exists('description', $row->toArray()) ? $row['description'] : null,
-                    'catalog' => $this->encodeUtf8($row['catalog']),
-                    'category_id' => $category->id,
-                    'editorial' => $this->encodeUtf8($row['editorial']),
-                    'city' => $this->encodeUtf8($row['city']),
-                    'reference' => $this->encodeUtf8($row['reference']),
-                ]
-            );
-
-            $book->authors()->sync(collect($authors)->pluck('id'));
-
         }
     }
 
