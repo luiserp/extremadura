@@ -1,15 +1,15 @@
 <?php
 
-namespace Modules\Comfyui\Providers;
+namespace Modules\TdUi\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class ComfyuiServiceProvider extends ServiceProvider
+class TdUiServiceProvider extends ServiceProvider
 {
-    protected string $moduleName = 'Comfyui';
+    protected string $moduleName = 'TdUi';
 
-    protected string $moduleNameLower = 'comfyui';
+    protected string $moduleNameLower = 'tdui';
 
     /**
      * Boot the application events.

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Comfyui\Http\Controllers\ComfyUIController;
+use Modules\TdUi\Http\Controllers\TdUiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +15,5 @@ use Modules\Comfyui\Http\Controllers\ComfyUIController;
 */
 
 Route::group([], function () {
-    Route::get('comfyui', ComfyUIController::class)->name('comfyui');
+    Route::resource('tdui', TdUiController::class)->names('tdui');
 });

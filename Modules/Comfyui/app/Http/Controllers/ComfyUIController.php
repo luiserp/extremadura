@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Comfyui\app\Http\Controllers;
+namespace Modules\Comfyui\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Modules\Comfyui\app\Services\ComfyUIService;
+use Modules\Comfyui\Services\ComfyUIService;
 
 class ComfyUIController extends Controller
 {

@@ -10,7 +10,7 @@
                 {{ trans('book.stats') }}
             </h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
                 <PieGraph v-if="bookCitiesStats" :title="trans('book.books_per_city') + ':'"
                     :labels="bookCitiesStats.labels" :data="bookCitiesStats.data" />
                 <PieGraph v-if="bookAuthorsStats" :title="trans('book.books_per_author') + ':'"

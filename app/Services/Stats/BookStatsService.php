@@ -32,6 +32,7 @@ class BookStatsService
     public function calculateCitiesStats()
     {
         $cities = Book::select('city', Book::raw('count(*) as total'))
+            ->whereNotIn('city', ['Desconocida'])
             ->groupBy('city')
             ->orderBy('total', 'desc')
             ->limit(5)
@@ -47,6 +48,7 @@ class BookStatsService
     {
         $authors = Author::select('name as author', Book::raw('count(*) as total'))
             ->join('author_book', 'authors.id', '=', 'author_book.author_id')
+            ->whereNotIn('authors.name', ['Desconocido', 'AA.VV.', 'Anónimo', 'Anonimo', 'otros'])
             ->groupBy('author')
             ->orderBy('total', 'desc')
             ->limit(5)

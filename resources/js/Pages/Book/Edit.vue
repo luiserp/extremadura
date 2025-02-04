@@ -117,7 +117,7 @@ const bookDescription = ref(bookData.value.bookDescription?.description ?? '');
                     <!-- Back and Next Book Button -->
                     <PrevAndNextButtons :bookData="bookData" routeName="books.edit" />
 
-                    <div class="flex justify-center mt-4 gap-2">
+                    <div v-if="can('edit books')" class="flex justify-center mt-4 gap-2">
                         <label for="active">{{ trans('common.status') + ':'}}</label>
                         <ToggleSwitch v-model="bookData.active" @change="setStatus(bookData)" />
                     </div>
@@ -135,7 +135,7 @@ const bookDescription = ref(bookData.value.bookDescription?.description ?? '');
         </Container>
 
         <!-- AI -->
-        <Container>
+        <!-- <Container>
             <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.prompt') }}</h2>
                 <Textarea v-model="bookDescription" rows="8" cols="30" class="w-full" />
@@ -152,7 +152,7 @@ const bookDescription = ref(bookData.value.bookDescription?.description ?? '');
                     <img :src="image.url" alt="book image" class="object-cover" />
                 </div>
             </div>
-        </Container>
+        </Container> -->
 
     </AppLayout>
 </template>

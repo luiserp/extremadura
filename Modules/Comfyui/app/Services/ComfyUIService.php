@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Modules\Comfyui\app\Services;
+namespace Modules\Comfyui\Services;
 
 use Ramsey\Uuid\Uuid;
 

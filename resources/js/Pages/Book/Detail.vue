@@ -66,7 +66,7 @@ const { showBook, editBook, checkBook, deleteBook, setStatus } = useBook();
             <div class="flex justify-between">
                 <div class="flex justify-between flex-wrap grow">
                     <div class="flex-auto space-y-2">
-                        <h1 class="text-xl font-bold">{{ bookData.title }}</h1>
+                        <h1 class="text-xl font-bold max-w-[30vw] break-words">{{ bookData.title }}</h1>
                         <div class="flex gap-2 flex-col">
                             <h2>{{ trans('book.authors') }}</h2>
                             <p v-for="author in bookData.authors">
@@ -106,15 +106,15 @@ const { showBook, editBook, checkBook, deleteBook, setStatus } = useBook();
 
             <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.description') }}</h2>
-                <Textarea v-model="bookData.description" rows="8" cols="30" class="w-full" readonly />
+                <p class="w-full" > {{ bookData.description }} </p>
             </div>
-            <div class="mt-4 space-y-2">
+            <!-- <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.reference') }}</h2>
                 <Textarea v-model="bookData.reference" rows="8" cols="30" class="w-full" readonly />
-            </div>
+            </div> -->
         </Container>
         <!-- AI -->
-        <Container>
+        <!-- <Container>
             <div class="mt-4 space-y-2">
                 <h2 class="font-semibold">{{ trans('book.prompt') }}</h2>
                 <Textarea v-model="bookDescription" rows="8" cols="30" class="w-full" readonly />
@@ -123,6 +123,6 @@ const { showBook, editBook, checkBook, deleteBook, setStatus } = useBook();
                 <h2 class="font-semibold">{{ trans('book.images') }}</h2>
                 <img :src="bookData.image_urls" alt="book image" class="max-h-64 object-contain rounded" />
             </div>
-        </Container>
+        </Container> -->
     </AppLayout>
 </template>

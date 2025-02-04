@@ -14,8 +14,17 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
-class BookImport implements ToCollection, WithHeadingRow
+class BookImport implements ToCollection, WithHeadingRow, WithCustomCsvSettings
 {
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'utf-8',
+            'delimiter' => ';',
+        ];
+    }
+
     /**
     * @param Collection $collection
     */
@@ -49,12 +58,10 @@ class BookImport implements ToCollection, WithHeadingRow
 
                 $year = is_numeric($row['year']) ? $row['year'] : null;
 
-                $book = Book::firstOrCreate(
+                $book = Book::create(
                     [
                         'title' => $this->encodeUtf8($row['title']),
                         'year' => $year,
-                    ],
-                    [
                         'description' => array_key_exists('description', $row->toArray()) ? $row['description'] : null,
                         'catalog' => $this->encodeUtf8($row['catalog']),
                         'category_id' => $category->id,

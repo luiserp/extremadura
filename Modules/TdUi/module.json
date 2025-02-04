@@ -1,0 +1,11 @@
+{
+    "name": "TdUi",
+    "alias": "tdui",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TdUi\\Providers\\TdUiServiceProvider"
+    ],
+    "files": []
+}

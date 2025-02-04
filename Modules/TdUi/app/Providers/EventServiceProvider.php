@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Comfyui\Providers;
+namespace Modules\TdUi\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 

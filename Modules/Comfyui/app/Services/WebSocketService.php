@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Comfyui\app\Services;
+namespace Modules\Comfyui\Services;
 
 use Illuminate\Support\Facades\Log;
 use WebSocket\Client;
